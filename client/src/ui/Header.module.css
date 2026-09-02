@@ -1,0 +1,73 @@
+/* Header.module.css */
+
+.header {
+  height: 58px;
+  padding: 0 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  background-color: #111925;
+  border-bottom: 1px solid #1b2635;
+}
+
+.headerContent {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.userName {
+  color: #cbd5e1;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.iconButton {
+  padding: 0;
+  border: none;
+  background: transparent;
+  width: 2.6rem;
+  height: 2.6rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #4f46e5;
+  cursor: pointer;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.iconButton:hover {
+  color: #818cf8;
+  transform: translateY(-1px);
+}
+
+.icon {
+  width: 1.9rem;
+  height: 1.9rem;
+}

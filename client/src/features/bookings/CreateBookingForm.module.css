@@ -1,0 +1,88 @@
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1.6rem;
+
+  padding-top: 1.4rem;
+}
+
+.cancelButton,
+.submitButton {
+  padding: 0.8rem 1.6rem;
+
+  font-family: inherit;
+  font-size: 1.5rem;
+  font-weight: 600;
+
+  border-radius: 0.6rem;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s,
+    border-color 0.2s,
+    transform 0.15s,
+    opacity 0.15s;
+}
+
+.cancelButton {
+  background-color: transparent;
+  color: #d1d5db;
+  border: 1px solid #374151;
+}
+
+.cancelButton:hover:not(:disabled) {
+  background-color: #1f2937;
+  border-color: #4b5563;
+}
+
+.submitButton {
+  background-color: #4f46e5;
+  color: white;
+  border: 1px solid #4f46e5;
+}
+
+.submitButton:hover:not(:disabled) {
+  background-color: #4338ca;
+  border-color: #4338ca;
+}
+
+.cancelButton:disabled,
+.submitButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.cancelButton:active,
+.submitButton:active {
+  transform: translateY(1px);
+}
+
+.select {
+  width: 100%;
+  max-width: 32rem;
+  height: 4.4rem;
+  padding: 1rem 1.4rem;
+
+  font-family: inherit;
+  font-size: 1.3rem;
+  color: #e5e7eb;
+
+  background-color: #182233;
+  border: 1px solid #4b5563;
+  border-radius: 0.6rem;
+
+  outline: none;
+}
+
+.select:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+.checkbox {
+  width: 1.8rem;
+  height: 1.8rem;
+  accent-color: #4f46e5;
+}

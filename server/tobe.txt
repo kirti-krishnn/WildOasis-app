@@ -1,0 +1,15 @@
+Yes — those changes should be implemented before deployment.
+
+Why
+Security hardening is essential for production. Without it, the API is exposed to header-based attacks, brute-force login, injection, and insecure cookie usage.
+Tighter CORS/HTTPS config is required if you want browser clients to safely use cookies and avoid cross-site leaks.
+Production safeguards like environment validation and secure cookie settings are not optional for a deployed server.
+What should be done before deployment
+Add security middleware: helmet, rate limiting, sanitization (express-mongo-sanitize, xss-clean)
+Enforce strict CORS using CLIENT_URL and credentials: true
+Enable secure cookies in production (secure, sameSite, httpOnly)
+Add HTTPS redirect / trust proxy handling for production
+Validate required env vars and document them
+Improve error handling for production mode
+Next step
+I can implement all of that now so the server is truly production ready.

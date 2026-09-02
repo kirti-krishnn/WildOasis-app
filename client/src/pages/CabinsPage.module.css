@@ -1,0 +1,159 @@
+.page {
+  width: 100%;
+  max-width: 118rem;
+  margin: 0 auto;
+  padding: 4rem 3.2rem;
+  color: #f9fafb;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2.4rem;
+  margin-bottom: 3.2rem;
+}
+
+.heading {
+  margin: 0;
+  color: #f9fafb;
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+}
+
+/* Filter */
+
+.filter {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.4rem;
+
+  background-color: #182231;
+  border: 1px solid #283446;
+  border-radius: 0.7rem;
+}
+
+.filterButton {
+  padding: 0.8rem 1.2rem;
+  border: none;
+  border-radius: 0.5rem;
+
+  background-color: transparent;
+  color: #f3f4f6;
+
+  font: inherit;
+  font-size: 1.4rem;
+  font-weight: 600;
+
+  white-space: nowrap;
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.filterButton:hover {
+  background-color: #263244;
+}
+
+.filterButton.active {
+  background-color: #5145e5;
+  color: #ffffff;
+}
+
+/* Sort */
+
+.sort {
+  min-width: 23.5rem;
+  padding: 1.1rem 3.8rem 1.1rem 1.5rem;
+
+  border: 1px solid #283446;
+  border-radius: 0.6rem;
+
+  background-color: #182231;
+  color: #f9fafb;
+
+  font: inherit;
+  font-size: 1.4rem;
+  font-weight: 600;
+
+  outline: none;
+  cursor: pointer;
+}
+
+.sort:focus {
+  border-color: #6366f1;
+}
+
+/* Add button */
+
+.addButton {
+  margin-top: 1.6rem;
+  padding: 1.2rem 1.7rem;
+
+  border: none;
+  border-radius: 0.6rem;
+
+  background-color: #5145e5;
+  color: #ffffff;
+
+  font: inherit;
+  font-size: 1.4rem;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.addButton:hover {
+  background-color: #4338ca;
+  transform: translateY(-1px);
+}
+
+.addButton:disabled {
+  background-color: #334155;
+  color: #94a3b8;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.addButton:disabled:hover {
+  background-color: #334155;
+  transform: none;
+}
+
+.addButton:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 900px) {
+  .page {
+    padding: 3rem 2rem;
+  }
+
+  .header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .controls {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .sort {
+    flex: 1;
+  }
+}

@@ -1,0 +1,45 @@
+.page {
+  width: 100%;
+  max-width: 118rem;
+  margin: 0 auto;
+  padding: 4rem 3.2rem;
+  color: #f9fafb;
+}
+
+.addButton {
+  margin-top: 1.6rem;
+  padding: 1.2rem 1.7rem;
+
+  border: none;
+  border-radius: 0.6rem;
+
+  background-color: #5145e5;
+  color: #ffffff;
+
+  font: inherit;
+  font-size: 1.4rem;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.addButton:hover:not(:disabled) {
+  background-color: #4338ca;
+  transform: translateY(-1px);
+}
+
+.addButton:disabled {
+  background-color: #334155;
+  color: #94a3b8;
+  cursor: not-allowed;
+}
+
+@media (max-width: 900px) {
+  .page {
+    padding: 3rem 2rem;
+  }
+}

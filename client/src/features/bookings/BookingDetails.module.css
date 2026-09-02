@@ -1,0 +1,231 @@
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 3.2rem;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2.4rem;
+}
+
+.headingGroup {
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+}
+
+.heading {
+  margin: 0;
+  color: #f9fafb;
+  font-size: 3rem;
+  font-weight: 700;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1.2rem;
+  border-radius: 999px;
+  font-size: 1.2rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.unconfirmed {
+  color: #bfdbfe;
+  background-color: #075985;
+}
+
+.checked-in {
+  color: #dcfce7;
+  background-color: #166534;
+}
+
+.checked-out {
+  color: #e0e7ff;
+  background-color: #3730a3;
+}
+
+.backLink {
+  color: #6557ff;
+  background: transparent;
+  border: none;
+  font: inherit;
+  font-size: 1.6rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.card {
+  overflow: hidden;
+  background-color: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 0.6rem;
+}
+
+.summary {
+  min-height: 7.2rem;
+  padding: 0 4rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 2.4rem;
+  color: #c7d2fe;
+  background-color: #5145e5;
+  font-size: 1.9rem;
+  font-weight: 800;
+}
+
+.summaryLeft,
+.summaryRight {
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+}
+
+.summaryRight {
+  justify-content: flex-end;
+}
+
+.summaryIcon {
+  width: 3.2rem;
+  height: 3.2rem;
+}
+
+.body {
+  padding: 3.2rem 4rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.2rem;
+}
+
+.guest {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  color: #94a3b8;
+  font-size: 1.7rem;
+}
+
+.guestStrong {
+  color: #f9fafb;
+  font-weight: 800;
+}
+
+.flag {
+  width: 2rem;
+}
+
+.infoRow {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  color: #e5e7eb;
+  font-size: 1.6rem;
+}
+
+.infoIcon {
+  width: 1.9rem;
+  height: 1.9rem;
+  color: #6557ff;
+}
+
+.priceBox {
+  margin-top: 1.6rem;
+  min-height: 7.2rem;
+  padding: 0 3.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  color: #fde68a;
+  background-color: #713f12;
+  border-radius: 0.6rem;
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+
+.priceMain {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.priceBreakdown {
+  color: #fef3c7;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.bookedAt {
+  align-self: flex-end;
+  color: #94a3b8;
+  font-size: 1.3rem;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1.2rem;
+}
+
+.primaryButton,
+.dangerButton,
+.secondaryButton {
+  padding: 1.2rem 1.8rem;
+  border-radius: 0.6rem;
+  font: inherit;
+  font-size: 1.5rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.primaryButton {
+  color: #ffffff;
+  background-color: #5145e5;
+  border: 1px solid #5145e5;
+}
+
+.dangerButton {
+  color: #ffffff;
+  background-color: #b91c1c;
+  border: 1px solid #b91c1c;
+}
+
+.secondaryButton {
+  color: #e5e7eb;
+  background-color: transparent;
+  border: 1px solid #374151;
+}
+
+.primaryButton:disabled,
+.dangerButton:disabled,
+.secondaryButton:disabled {
+  color: #94a3b8;
+  background-color: #334155;
+  border-color: #334155;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.message {
+  color: #e5e7eb;
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+@media (max-width: 800px) {
+  .header,
+  .summary {
+    align-items: flex-start;
+    grid-template-columns: 1fr;
+  }
+
+  .summaryRight {
+    justify-content: flex-start;
+  }
+}

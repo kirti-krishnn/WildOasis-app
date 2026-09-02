@@ -1,0 +1,75 @@
+.stat {
+  display: grid;
+  grid-template-columns: 6.4rem 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 1.6rem;
+  row-gap: 0.4rem;
+  align-items: center;
+
+  min-width: 0;
+  padding: 1.6rem;
+
+  background-color: #111827;
+  border: 1px solid #253041;
+  border-radius: 0.8rem;
+}
+
+.icon {
+  grid-row: 1 / -1;
+
+  width: 6.4rem;
+  height: 6.4rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 999rem;
+}
+
+.icon svg {
+  width: 3.2rem;
+  height: 3.2rem;
+}
+
+.blue {
+  color: #60a5fa;
+  background-color: rgba(37, 99, 235, 0.16);
+}
+
+.green {
+  color: #34d399;
+  background-color: rgba(5, 150, 105, 0.16);
+}
+
+.indigo {
+  color: #818cf8;
+  background-color: rgba(79, 70, 229, 0.18);
+}
+
+.orange {
+  color: #fbbf24;
+  background-color: rgba(217, 119, 6, 0.18);
+}
+
+.title {
+  margin: 0;
+
+  color: #9ca3af;
+
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.value {
+  min-width: 0;
+  margin: 0;
+
+  color: #f9fafb;
+
+  font-size: 2.4rem;
+  font-weight: 700;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+}

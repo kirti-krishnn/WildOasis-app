@@ -1,0 +1,119 @@
+.menu {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* Three-dot toggle button */
+.toggle {
+  background: none;
+  border: none;
+  padding: 0.4rem;
+
+  border-radius: var(--border-radius-sm);
+
+  transform: translateX(0.8rem);
+
+  transition: all 0.2s;
+
+  cursor: pointer;
+}
+
+.toggle:hover {
+  background-color: var(--color-grey-100);
+}
+
+.toggle svg {
+  width: 2.4rem;
+  height: 2.4rem;
+
+  color: var(--color-grey-400);
+}
+
+
+/* Dropdown menu */
+.list {
+  position: fixed;
+  margin: 0;
+  padding: 0.3rem 0;
+
+  list-style: none;
+
+  background-color: var(--color-grey-0);
+
+  box-shadow: var(--shadow-md);
+
+  border-radius: var(--border-radius-md);
+
+  overflow: auto;
+  max-height: 60vh;
+
+  z-index: 1000;
+  min-width: 16rem;
+  width: max-content;
+}
+
+
+/* Individual menu option */
+.button {
+  width: 100%;
+  width: 100%;
+
+  border: none;
+  background: transparent;
+
+  padding: .5rem 1rem;
+
+  font-family: inherit;
+  font-size: 1.6rem;
+  color: var(--color-grey-700);
+
+  text-align: left;
+
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  white-space: nowrap;
+
+  cursor: pointer;
+
+  transition: background-color 0.15s
+}
+
+.button:hover {
+  background-color: rgba(255,255,255,0.02);
+}
+
+.button:disabled {
+  color: #64748b;
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.button:disabled:hover {
+  background-color: transparent;
+}
+
+.button svg {
+  width: 1.6rem;
+  height: 1.6rem;
+
+  color: var(--color-grey-400);
+
+  transition: color 0.2s;
+}
+
+.button:disabled svg {
+  color: #64748b;
+}
+
+.button + .button {
+  border-top: 1px solid rgba(255,255,255,0.03);
+}
+
+.icon {
+  display: inline-grid;
+  place-items: center;
+  width: 2.4rem;
+  height: 2.4rem;
+}

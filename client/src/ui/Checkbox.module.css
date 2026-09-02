@@ -1,0 +1,33 @@
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.6rem;
+
+  color: #f9fafb;
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.4;
+
+  cursor: pointer;
+}
+
+.input {
+  width: 2.4rem;
+  height: 2.4rem;
+
+  accent-color: #5145e5;
+  cursor: pointer;
+}
+
+.disabled {
+  cursor: not-allowed;
+  opacity: 0.72;
+}
+
+.disabled .input {
+  cursor: not-allowed;
+}
+
+.label {
+  min-width: 0;
+}

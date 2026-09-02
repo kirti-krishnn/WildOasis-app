@@ -1,0 +1,61 @@
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 3rem;
+
+  overflow: hidden;
+}
+
+.modal__backdrop {
+  position: absolute;
+  inset: 0;
+
+  background-color: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(3px);
+}
+
+.modal__window {
+  position: relative;
+  z-index: 1;
+
+  width: min(85vw, 92rem);
+
+  background-color: #111827;
+  border-radius: 1rem;
+
+  box-shadow: 0 2.4rem 4.8rem rgba(0, 0, 0, 0.35);
+
+    padding: 3.2rem 4rem;
+  box-sizing: border-box;
+
+  overflow: hidden;
+}
+
+  .closeButton {
+    position: absolute;
+    top: 1.6rem;
+    right: 1.6rem;
+
+    width: 2.4rem;
+    height: 2.4rem;
+
+    color: #f9fafb;
+
+    cursor: pointer;
+
+    transition:
+      color 0.2s,
+      transform 0.2s;
+  }
+
+  .closeButton:hover {
+    color: #f3f4f6;
+
+    transform: scale(1.1);
+  }

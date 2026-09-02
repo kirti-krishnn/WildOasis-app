@@ -1,0 +1,81 @@
+.cabin {
+  padding-left: 3.6rem !important;
+  color: #e5e7eb;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.08rem;
+}
+
+.guestName,
+.dateSummary {
+  color: #f9fafb;
+  font-weight: 600;
+}
+
+.guestEmail,
+.dateRange {
+  margin-top: 0.4rem;
+  color: #94a3b8;
+  font-size: 1.3rem;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 9.6rem;
+  padding: 0.4rem 0.8rem;
+
+  border-radius: 999px;
+
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.unconfirmed {
+  color: #bfdbfe;
+  background-color: #075985;
+}
+
+.checkedIn {
+  color: #dcfce7;
+  background-color: #166534;
+}
+
+.checkedOut {
+  color: #e0e7ff;
+  background-color: #3730a3;
+}
+
+.price {
+  color: #f9fafb;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-weight: 700;
+}
+
+.priceBreakdown {
+  margin-top: 0.4rem;
+  color: #94a3b8;
+  font-family: inherit;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.paid,
+.unpaid {
+  margin-top: 0.3rem;
+  font-family: inherit;
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.paid {
+  color: #86efac;
+}
+
+.unpaid {
+  color: #fde68a;
+}

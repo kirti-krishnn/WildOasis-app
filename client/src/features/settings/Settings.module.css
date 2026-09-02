@@ -1,0 +1,30 @@
+.settings {
+  width: 100%;
+  max-width: 92rem;
+  padding: 3.2rem 0;
+}
+
+.heading {
+  margin: 0 0 2.4rem;
+  color: #f9fafb;
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.message {
+  margin: 3.2rem 0;
+  color: #e5e7eb;
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+
+@media (max-width: 700px) {
+  .settings {
+    padding: 2.4rem 0;
+  }
+
+  .heading {
+    font-size: 2.4rem;
+  }
+}

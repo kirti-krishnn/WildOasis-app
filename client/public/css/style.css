@@ -1,0 +1,65 @@
+:root {
+  --section-rotate: 9vw;
+  --color-grey-0: #0f1724;
+  --color-grey-50: #0b1220;
+  --color-grey-100: #374151;
+  --color-grey-400: #9ca3af;
+  --color-grey-700: #d1d5db;
+  --shadow-md: 0 8px 24px rgba(2,6,23,0.6);
+  --border-radius-md: 0.8rem;
+}
+
+::-moz-selection {
+  background-color: #55c57a;
+  color: #fff;
+}
+
+::selection {
+  background-color: #55c57a;
+  color: #fff;
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: inherit;
+  box-sizing: inherit;
+}
+
+html {
+  font-size: 62.5%;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+body {
+  line-height: 1.6;
+  font-weight: 300;
+  font-family: 'Poppins', sans-serif;
+  color: #f3f4f6;
+  padding: 0;
+  min-height: 100vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  background-color: #0b1018;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.main {
+  background-color: #f7f7f7;
+  padding: 8rem 6rem;
+  -webkit-box-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  position: relative;
+}

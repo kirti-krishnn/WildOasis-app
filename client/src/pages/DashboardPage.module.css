@@ -1,0 +1,27 @@
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+}
+
+.message {
+  margin: 0;
+
+  color: #d1d5db;
+
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+
+.middleGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(36rem, 1fr);
+  gap: 2.4rem;
+  align-items: stretch;
+}
+
+@media (max-width: 1050px) {
+  .middleGrid {
+    grid-template-columns: 1fr;
+  }
+}

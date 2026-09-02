@@ -1,0 +1,36 @@
+.header {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  padding: 1.5rem 2rem;
+  background: var(--color-primary-950);
+  border-bottom: 1px solid var(--color-primary-900);
+}
+
+.homeHeader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: transparent;
+  border-bottom: 0;
+}
+
+.inner {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 2rem;
+  max-width: 82rem;
+  margin: 0 auto;
+}
+
+@media (max-width: 760px) {
+  .header {
+    padding: 0.875rem 1rem;
+  }
+
+  .inner {
+    align-items: flex-start;
+  }
+}

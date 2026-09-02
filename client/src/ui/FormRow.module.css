@@ -1,0 +1,112 @@
+.formRow {
+  display: grid;
+  grid-template-columns: 32rem 1fr;
+  align-items: center;
+
+  gap: 1.4rem;
+
+  padding: 1.2rem 0;
+
+  border-bottom: .5px solid #232e3f; 
+}
+
+.formRowLabel {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #e5e7eb;
+}
+
+/* Text + number inputs */
+.formRow input:not([type="file"]),
+.formRow textarea {
+  width: 100%;
+  max-width: 32rem;
+
+  padding: 1rem 1.4rem;
+
+  font-family: inherit;
+  font-size: 1.3rem;
+  color: #e5e7eb;
+
+  background-color: #182233;
+
+  border: 1px solid #4b5563;
+  border-radius: 0.6rem;
+
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.formRow input:not([type="file"]) {
+  height: 4.4rem;
+}
+
+.formRow input:focus,
+.formRow textarea:focus {
+  outline: none;
+
+  border-color: #6366f1;
+
+  box-shadow:
+    0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+.formRow input::placeholder,
+.formRow textarea::placeholder {
+  color: #6b7280;
+}
+
+
+/* FILE INPUT */
+
+.formRow input[type="file"] {
+  font-family: inherit;
+  font-size: 1.3rem;
+
+  color: #d1d5db;
+}
+
+.formRow input[type="file"]::file-selector-button {
+  margin-right: 1.4rem;
+
+  padding: 1rem 1.4rem;
+
+  border: none;
+  border-radius: 0.6rem;
+
+  background-color: #4f46e5;
+  color: white;
+
+  font-family: inherit;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: background-color 0.2s;
+}
+
+.formRow input[type="file"]::file-selector-button:hover {
+  background-color: #4338ca;
+}
+
+.formRow textarea {
+  min-height: 10rem;
+  resize: vertical;
+}
+
+.inputWithError {
+  display: grid;
+  grid-template-columns: minmax(0, 32rem) auto;
+  align-items: center;
+  gap: 1rem;
+}
+
+.error {
+  color: #ae2929;
+  font-size: 1 rem;
+  font-weight: 500;
+  white-space: nowrap;
+}

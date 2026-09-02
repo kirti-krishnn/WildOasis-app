@@ -1,0 +1,47 @@
+.pagination {
+  width: 100%;
+  min-height: 6.4rem;
+  padding: 0 2.4rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 2.4rem;
+
+  background-color: #111827;
+  border: 1px solid #374151;
+  border-top: none;
+  border-radius: 0 0 0.8rem 0.8rem;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+
+  padding: 0.8rem 0;
+
+  color: #e5e7eb;
+  background: transparent;
+  border: none;
+
+  font: inherit;
+  font-size: 1.4rem;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.button:hover:not(:disabled) {
+  color: #ffffff;
+}
+
+.button:disabled {
+  color: #6b7280;
+  cursor: not-allowed;
+}
+
+.icon {
+  width: 1.8rem;
+  height: 1.8rem;
+}

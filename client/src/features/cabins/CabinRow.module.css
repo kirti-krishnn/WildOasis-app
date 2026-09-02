@@ -1,0 +1,101 @@
+.row {
+  height: 6.8rem;
+  transition: background-color 0.2s ease;
+}
+
+.row:hover {
+  background-color: #1d2939;
+}
+
+.row td {
+  padding: 0 1.6rem;
+  border-top: 1px solid #263244;
+
+  color: #f3f4f6;
+  font-size: 1.4rem;
+  vertical-align: middle;
+}
+
+/* Cabin image */
+
+.imageCell {
+  width: 9.2rem;
+  padding: 0 !important;
+}
+
+.image {
+  display: block;
+  width: 9.2rem;
+  height: 6.7rem;
+  object-fit: cover;
+}
+
+/* Cabin name */
+
+.name {
+  color: #f9fafb;
+  font-weight: 700;
+  letter-spacing: 0.05rem;
+}
+
+/* Capacity */
+
+.capacity {
+  color: #f3f4f6;
+}
+
+/* Price */
+
+.price {
+  color: #f9fafb;
+  font-weight: 700;
+  letter-spacing: 0.04rem;
+}
+
+/* Discount */
+
+.discount {
+  color: #b9fff1;
+  font-weight: 600;
+}
+
+.noDiscount {
+  color: #d1d5db;
+}
+
+/* Three-dot menu */
+
+.menuCell {
+  width: 5rem;
+  text-align: center;
+}
+
+.menuButton {
+  width: 3.2rem;
+  height: 3.2rem;
+  padding: 0;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 0.5rem;
+
+  background-color: transparent;
+  color: #d1d5db;
+
+  font-size: 2.2rem;
+  line-height: 1;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.menuButton:hover {
+  background-color: #263244;
+  color: #ffffff;
+}
