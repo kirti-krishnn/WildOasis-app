@@ -46,7 +46,7 @@ body {
     aspect-ratio: 1;
     border-radius: 50%;
     border: 8px solid theme('colors.primary.900');
-    border-right-color: theme('colors.primary.200');
+    border-right-color: theme('colors.accent.500');
     animation: rotate 1s infinite linear;
   }
 
@@ -55,7 +55,7 @@ body {
     width: 20px;
     aspect-ratio: 1;
     border-radius: 50%;
-    border: 2px solid theme('colors.primary.200');
+    border: 2px solid theme('colors.accent.500');
     border-right-color: transparent;
     animation: rotate 1s infinite linear;
   }

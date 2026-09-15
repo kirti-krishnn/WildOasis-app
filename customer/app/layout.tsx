@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import Header from "@/_components/Header";
+import AuthProvider from "@/_components/AuthProvider";
+import ReservationReminder from "@/_components/ReservationReminder";
+import { ReservationProvider } from "@/_components/ReservationContext";
 
 
 import {Josefin_Sans} from "next/font/google";
@@ -27,8 +30,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className ={`${josefin.className}`}>
-        <Header/>
-        {children}
+        <AuthProvider>
+          <ReservationProvider>
+            <Header/>
+            {children}
+            <ReservationReminder />
+          </ReservationProvider>
+        </AuthProvider>
         
       </body>
     </html>

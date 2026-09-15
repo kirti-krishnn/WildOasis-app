@@ -1,0 +1,157 @@
+.dateSelector {
+  display: flex;
+  min-height: 29.5rem;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.calendar {
+  --rdp-day-height: 2.45rem;
+  --rdp-day-width: 2.45rem;
+  --rdp-day_button-height: 2.25rem;
+  --rdp-day_button-width: 2.25rem;
+  --rdp-months-gap: clamp(2rem, 3vw, 3.5rem);
+  --rdp-nav_button-height: 2rem;
+  --rdp-nav_button-width: 2rem;
+  --rdp-nav-height: 2.25rem;
+
+  align-self: center;
+  width: 100%;
+  padding: 3rem 2.5rem 2rem;
+  color: var(--color-primary-300);
+}
+
+.calendar :global(.rdp-months) {
+  width: 100%;
+  max-width: none;
+  flex-wrap: nowrap;
+  justify-content: center;
+  gap: clamp(2rem, 4vw, 4rem);
+}
+
+.calendar :global(.rdp-month) {
+  flex: 0 1 auto;
+}
+
+.calendar :global(.rdp-month_grid) {
+  width: auto;
+}
+
+.calendar :global(.rdp-month_caption) {
+  justify-content: center;
+  color: var(--color-primary-200);
+  font-size: 1.25rem;
+  font-weight: 700;
+  /* Prevent this label from intercepting clicks meant for the nav buttons it overlaps. */
+  pointer-events: none;
+}
+
+.calendar :global(.rdp-nav) {
+  inset-inline: 0;
+  justify-content: space-between;
+  color: var(--color-primary-200);
+}
+
+.calendar :global(.rdp-chevron) {
+  fill: currentColor;
+}
+
+.calendar :global(.rdp-weekday) {
+  color: var(--color-primary-300);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.calendar :global(.rdp-day_button) {
+  color: var(--color-primary-300);
+  font-size: 1rem;
+}
+
+.calendar :global(.rdp-disabled .rdp-day_button) {
+  color: rgb(from var(--color-primary-700) r g b / 0.45);
+}
+
+.calendar :global(.rdp-selected .rdp-day_button) {
+  background: var(--color-accent-500);
+  color: var(--color-primary-900);
+}
+
+.priceBar {
+  display: flex;
+  min-height: 5.5rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1rem 2rem;
+  background: var(--color-accent-500);
+  color: var(--color-primary-800);
+}
+
+.priceDetails,
+.nightPrice {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.currentPrice,
+.multiplier,
+.totalPrice {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.oldPrice {
+  color: var(--color-primary-700);
+  font-weight: 600;
+  text-decoration: line-through;
+}
+
+.multiplier {
+  background: var(--color-accent-600);
+  padding: 0.45rem 0.75rem;
+}
+
+.totalLabel {
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.clearButton {
+  border: 1px solid var(--color-primary-800);
+  padding: 0.5rem 1rem;
+  background: transparent;
+  color: var(--color-primary-800);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  .dateSelector {
+    min-height: auto;
+  }
+
+  .calendar {
+    --rdp-day-height: 2.25rem;
+    --rdp-day-width: 2.25rem;
+    --rdp-day_button-height: 2rem;
+    --rdp-day_button-width: 2rem;
+
+    padding: 1.5rem 1rem;
+  }
+
+  .calendar :global(.rdp-months) {
+    flex-wrap: wrap;
+    gap: 1.25rem;
+  }
+
+  .priceBar,
+  .priceDetails {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

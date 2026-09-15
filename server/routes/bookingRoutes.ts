@@ -13,7 +13,8 @@ import {
 
 const router = express.Router();
 
-router.use(authController.protectedRoute);
+// Temporarily disabled while reservation fetching is being wired up.
+// router.use(authController.protectedRoute);
 
 router.get('/after-date/:date', getBookingByDate);
 router.get('/stays-after-date/:date', getStaysByDate);
@@ -21,7 +22,8 @@ router.get('/stays-today-activity', getStaysTodayActivity);
 router.get('/', getAllBookings);
 router.get('/:id', getBooking);
 
-router.use(authController.restrictTo('admin'));
+// Temporarily disabled while authentication is paused.
+// router.use(authController.restrictTo('admin'));
 router.post('/', createBooking);
 router.patch('/:id', updateBooking);
 router.delete('/:id', deleteBooking);

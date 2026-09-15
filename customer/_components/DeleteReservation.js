@@ -1,11 +1,48 @@
-import { TrashIcon } from '@heroicons/react/24/solid';
+'use client';
 
-function DeleteReservation({ bookingId }) {
+import { TrashIcon } from '@heroicons/react/24/solid';
+import { useFormStatus } from 'react-dom';
+import { deleteReservation } from '@/_lib/actions';
+import styles from './DeleteReservation.module.css';
+
+function DeleteButton() {
+  const { pending } = useFormStatus();
+
   return (
-    <button className='group flex items-center gap-2 uppercase text-xs font-bold text-primary-300 flex-grow px-3 hover:bg-accent-600 transition-colors hover:text-primary-900'>
-      <TrashIcon className='h-5 w-5 text-primary-600 group-hover:text-primary-800 transition-colors' />
-      <span className='mt-1'>Delete</span>
+    <button
+      className={styles.button}
+      type="submit"
+      disabled={pending}
+    >
+      {pending ? (
+        <span className={styles.spinner} aria-label="Deleting" />
+      ) : (
+        <TrashIcon className={styles.icon} />
+      )}
+      <span>{pending ? 'Deleting...' : 'Delete'}</span>
     </button>
+  );
+}
+
+function DeleteReservation({ bookingId, onDelete }) {
+  function handleSubmit(event) {
+    if (!window.confirm('Do you really want to delete this reservation?')) {
+      event.preventDefault();
+      return;
+    }
+
+    onDelete?.(bookingId);
+  }
+
+  return (
+    <form
+      className={styles.form}
+      action={deleteReservation}
+      onSubmit={handleSubmit}
+    >
+      <input type="hidden" name="bookingId" value={bookingId} />
+      <DeleteButton />
+    </form>
   );
 }
 

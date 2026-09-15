@@ -1,0 +1,10 @@
+.layout {
+  display: grid;
+  height: 100%;
+  grid-template-columns: 16rem minmax(0, 1fr);
+  gap: 3rem;
+}
+
+.content {
+  padding-top: 0.25rem;
+}

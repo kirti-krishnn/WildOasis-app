@@ -1,13 +1,24 @@
-export const metadata={
-  title: "Guests Page",
+import { auth } from "@/_lib/auth";
+import SignOutButton from "@/_components/SignOutButton";
+import styles from "./page.module.css";
+
+export const metadata = {
+  title: "Guest Area",
   description: "Customer website for The Wild Oasis",
 };
-function page() {
-    return (
-        <div>           
-            <h1>Accounts page</h1>
-        </div>
-    )
+
+async function Page() {
+  const session = await auth();
+  const name = session?.user?.name || "Guest";
+
+  return (
+    <div className={styles.page}>
+      <h1 className={styles.heading}>Welcome, {name}</h1>
+      <div className={styles.actions}>
+        <SignOutButton />
+      </div>
+    </div>
+  );
 }
 
-export default page
+export default Page;

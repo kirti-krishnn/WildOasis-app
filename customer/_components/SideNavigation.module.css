@@ -40,6 +40,15 @@
   color: var(--color-primary-100);
 }
 
+.activeLink {
+  background: var(--color-primary-900);
+  color: var(--color-accent-400);
+}
+
+.activeLink .icon {
+  color: var(--color-accent-400);
+}
+
 .icon {
   width: 1.25rem;
   height: 1.25rem;

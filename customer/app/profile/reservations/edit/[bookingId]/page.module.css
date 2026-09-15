@@ -1,0 +1,115 @@
+.page {
+  width: 100%;
+}
+
+.heading {
+  margin: 0 0 1.75rem;
+  color: var(--color-accent-400);
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2rem 3rem;
+  background: var(--color-primary-900);
+  color: var(--color-primary-200);
+  font-size: 1.125rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  color: var(--color-primary-200);
+  font-size: 1rem;
+}
+
+.input {
+  width: 100%;
+  border: 0;
+  border-radius: 2px;
+  padding: 0.75rem 1.25rem;
+  background: var(--color-primary-200);
+  color: var(--color-primary-800);
+  font: inherit;
+  font-size: 1rem;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.15);
+}
+
+.textarea {
+  min-height: 4rem;
+  resize: vertical;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.error {
+  margin: 0;
+  color: #fecaca;
+  font-size: 0.95rem;
+}
+
+.submit {
+  border: 0;
+  padding: 1rem 2rem;
+  background: var(--color-accent-500);
+  color: var(--color-primary-800);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 180ms ease;
+}
+
+.submit:hover {
+  background: var(--color-accent-600);
+}
+
+.submit:disabled {
+  cursor: not-allowed;
+  background: #6b7280;
+  color: #d1d5db;
+}
+
+.spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.5rem;
+  border: 2px solid var(--color-primary-800);
+  border-right-color: transparent;
+  border-radius: 50%;
+  vertical-align: -0.15rem;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 760px) {
+  .form {
+    padding: 1.5rem;
+  }
+
+  .actions {
+    justify-content: stretch;
+  }
+
+  .submit {
+    width: 100%;
+  }
+}

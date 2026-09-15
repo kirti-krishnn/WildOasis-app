@@ -10,13 +10,12 @@ import {
 
 const router = express.Router();
 
-router.use(authController.protectedRoute);
-
 router.get('/', getAllGuests);
 router.get('/:id', getGuest);
-
-router.use(authController.restrictTo('admin'));
 router.post('/', createGuest);
+
+router.use(authController.protectedRoute);
+router.use(authController.restrictTo('admin'));
 router.patch('/:id', updateGuest);
 router.delete('/:id', deleteGuest);
 

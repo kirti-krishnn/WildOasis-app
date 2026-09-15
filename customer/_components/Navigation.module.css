@@ -26,6 +26,19 @@
   color: var(--color-accent-400);
 }
 
+.accountLink {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.avatar {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
 @media (max-width: 960px) {
   .list {
     gap: 2rem;

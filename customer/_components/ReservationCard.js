@@ -1,53 +1,58 @@
 import { PencilSquareIcon } from '@heroicons/react/24/solid';
 import { format, formatDistance, isPast, isToday, parseISO } from 'date-fns';
 import DeleteReservation from './DeleteReservation';
+import styles from './ReservationCard.module.css';
+import Image from 'next/image';
 
 export const formatDistanceFromNow = (dateStr) =>
   formatDistance(parseISO(dateStr), new Date(), {
     addSuffix: true,
   }).replace('about ', '');
 
-function ReservationCard({ booking }) {
+function ReservationCard({ booking, onDelete }) {
   const {
     id,
-    guestId,
     startDate,
     endDate,
     numNights,
     totalPrice,
     numGuests,
-    status,
     created_at,
     cabins: { name, image },
   } = booking;
+  const isPastBooking = isPast(new Date(startDate));
 
   return (
-    <div className='flex border border-primary-800'>
-      <div className='relative h-32 aspect-square'>
-        <img
+    <div className={styles.card}>
+      <div className={styles.imageWrap}>
+        <Image
+        width={200}
+        height={200}
+          priority
+          quality={100}
           src={image}
           alt={`Cabin ${name}`}
-          className='object-cover border-r border-primary-800'
+          className={styles.image}
         />
       </div>
 
-      <div className='flex-grow px-6 py-3 flex flex-col'>
-        <div className='flex items-center justify-between'>
-          <h3 className='text-xl font-semibold'>
+      <div className={styles.details}>
+        <div className={styles.headingRow}>
+          <h3 className={styles.title}>
             {numNights} nights in Cabin {name}
           </h3>
-          {isPast(new Date(startDate)) ? (
-            <span className='bg-yellow-800 text-yellow-200 h-7 px-3 uppercase text-xs font-bold flex items-center rounded-sm'>
+          {isPastBooking ? (
+            <span className={`${styles.status} ${styles.past}`}>
               past
             </span>
           ) : (
-            <span className='bg-green-800 text-green-200 h-7 px-3 uppercase text-xs font-bold flex items-center rounded-sm'>
+            <span className={`${styles.status} ${styles.upcoming}`}>
               upcoming
             </span>
           )}
         </div>
 
-        <p className='text-lg text-primary-300'>
+        <p className={styles.dates}>
           {format(new Date(startDate), 'EEE, MMM dd yyyy')} (
           {isToday(new Date(startDate))
             ? 'Today'
@@ -55,27 +60,29 @@ function ReservationCard({ booking }) {
           ) &mdash; {format(new Date(endDate), 'EEE, MMM dd yyyy')}
         </p>
 
-        <div className='flex gap-5 mt-auto items-baseline'>
-          <p className='text-xl font-semibold text-accent-400'>${totalPrice}</p>
-          <p className='text-primary-300'>&bull;</p>
-          <p className='text-lg text-primary-300'>
+        <div className={styles.footer}>
+          <p className={styles.price}>${totalPrice}</p>
+          <p className={styles.separator}>&bull;</p>
+          <p className={styles.guests}>
             {numGuests} guest{numGuests > 1 && 's'}
           </p>
-          <p className='ml-auto text-sm text-primary-400'>
+          <p className={styles.bookedAt}>
             Booked {format(new Date(created_at), 'EEE, MMM dd yyyy, p')}
           </p>
         </div>
       </div>
 
-      <div className='flex flex-col border-l border-primary-800 w-[100px]'>
+      <div className={styles.actions}>
         <a
-          href={`/account/reservations/edit/${id}`}
-          className='group flex items-center gap-2 uppercase text-xs font-bold text-primary-300 border-b border-primary-800 flex-grow px-3 hover:bg-accent-600 transition-colors hover:text-primary-900'
+          href={`/profile/reservations/edit/${id}`}
+          className={styles.editLink}
         >
-          <PencilSquareIcon className='h-5 w-5 text-primary-600 group-hover:text-primary-800 transition-colors' />
-          <span className='mt-1'>Edit</span>
+          <PencilSquareIcon className={styles.editIcon} />
+          <span>Edit</span>
         </a>
-        <DeleteReservation bookingId={id} />
+        {!isPastBooking && (
+          <DeleteReservation bookingId={id} onDelete={onDelete} />
+        )}
       </div>
     </div>
   );

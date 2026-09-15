@@ -1,7 +1,14 @@
+"use client";
+
 import Link from "next/link";
+import Image from "next/image";
+import { useSession } from "next-auth/react";
 import styles from "./Navigation.module.css";
 
 export default function Navigation() {
+  const { data: session } = useSession();
+  const userImage = session?.user?.image;
+
   return (
     <nav className={styles.nav}>
       <ul className={styles.list}>
@@ -18,9 +25,19 @@ export default function Navigation() {
         <li>
           <Link
             href="/account"
-            className={styles.link}
+            className={`${styles.link} ${styles.accountLink}`}
           >
-            Guests
+            {userImage && (
+              <Image
+                src={userImage}
+                alt={session.user.name || "Guest"}
+                width={32}
+                height={32}
+                className={styles.avatar}
+                referrerPolicy="no-referrer"
+              />
+            )}
+            <span>Guest area</span>
           </Link>
         </li>
       </ul>

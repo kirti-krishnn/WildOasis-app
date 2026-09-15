@@ -1,7 +1,13 @@
 import { EyeSlashIcon, MapPinIcon, UsersIcon } from "@heroicons/react/24/solid";
 import { getCabin, getCabins } from "@/_lib/data-service";
+import TextExpander from "@/_components/TextExpander";
 import styles from "../page.module.css";
 import Image from "next/image";
+import Reservation from "@/_components/Reservation";
+import Spinner from "@/_components/Spinner";
+import { Suspense } from "react";
+
+export const dynamic = "force-dynamic";
 
 export async function generateStaticParams() {
   const cabins = await getCabins();
@@ -36,8 +42,8 @@ export default async function Page({ params }) {
   const { name, maxCapacity, image, description } = cabin;
 
   return (
-    <main className={styles.page}>
-      <div className={styles.cabin}>
+    <main className={`${styles.page} ${styles.detailPage}`}>
+      <div className={`${styles.cabin} ${styles.detailCabin}`}>
         <div className={styles.imageWrap}>
           <Image width={220} height={195.2} src={image} alt={`Cabin ${name}`} />
         </div>
@@ -45,7 +51,9 @@ export default async function Page({ params }) {
         <div className={styles.content}>
           <h3 className={styles.title}>Cabin {name}</h3>
 
-          <p className={styles.description}>{description}</p>
+          <p className={styles.description}>
+            <TextExpander>{description}</TextExpander>
+          </p>
 
           <ul className={styles.metaList}>
             <li className={styles.metaItem}>
@@ -71,10 +79,12 @@ export default async function Page({ params }) {
           </ul>
         </div>
       </div>
-
-      <div>
-        <h2 className={styles.reserveTitle}>Reserve today. Pay on arrival.</h2>
+      <div className={styles.reserve}>
+        <h2 className={styles.reserveTitle}>Reserve {cabin.name} today. Pay on arrival.</h2>
       </div>
+      <Suspense fallback={<Spinner />}>
+        <Reservation cabin={cabin} />
+      </Suspense>
     </main>
   );
 }

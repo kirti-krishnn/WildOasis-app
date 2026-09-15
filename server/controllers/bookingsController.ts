@@ -140,6 +140,7 @@ const addCalculatedPrice = (booking: BookingWithPrice, breakfastPrice: number) =
 
   return {
     ...normalizeBookingDates(booking),
+    numNights: nights,
     extrasPrice,
     totalPrice,
   };
@@ -197,7 +198,7 @@ export const getAllBookings = catchAsync(async (req, res) => {
 
   const features = new APIFeatures(
     Booking.find(baseFilter)
-      .populate('cabinId', 'name regularPrice')
+      .populate('cabinId', 'name regularPrice image')
       .populate('guestId', 'fullName email'),
     queryParams,
   )
@@ -223,7 +224,7 @@ export const getAllBookings = catchAsync(async (req, res) => {
 
 export const getBooking = catchAsync(async (req, res, next) => {
   const booking = await Booking.findById(req.params.id)
-    .populate('cabinId', 'name regularPrice')
+    .populate('cabinId', 'name maxCapacity regularPrice image')
     .populate('guestId', 'fullName email nationalID countryFlag')
     .lean();
 

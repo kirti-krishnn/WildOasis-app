@@ -1,8 +1,10 @@
 import { eachDayOfInterval } from "date-fns";
 
+import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 
-const SERVER_API_URL = process.env.SERVER_API_URL || "http://localhost:5000/api/v1";
+const SERVER_API_URL = process.env.SERVER_API_URL || "http://127.0.0.1:5000/api/v1";
+const REST_COUNTRIES_API_KEY = process.env.REST_COUNTRIES_API_KEY;
 
 class ApiError extends Error {
   constructor(message, status) {
@@ -12,14 +14,23 @@ class ApiError extends Error {
 }
 
 async function request(path, options = {}) {
+  const { forwardCookies = false, ...fetchOptions } = options;
   const headers = new Headers(options.headers || {});
 
   if (options.body && !(options.body instanceof FormData)) {
     headers.set("Content-Type", "application/json");
   }
 
+  if (forwardCookies) {
+    const cookieHeader = (await cookies()).toString();
+
+    if (cookieHeader) {
+      headers.set("Cookie", cookieHeader);
+    }
+  }
+
   const response = await fetch(`${SERVER_API_URL}${path}`, {
-    ...options,
+    ...fetchOptions,
     headers,
     credentials: "include",
   });
@@ -80,7 +91,6 @@ export async function getCabinPrice(id) {
 }
 
 export async function getCabins() {
-   await new Promise((res) => globalThis.setTimeout(res, 2000));
   const cabins = await request(
    
     
@@ -96,14 +106,24 @@ export async function getCabins() {
 }
 
 export async function getGuest(id) {
+  if (id?.includes("@")) {
+    const guests = await request(`/guests?email=${encodeURIComponent(id)}`, {
+      cache: "no-store",
+    });
+
+    return Array.isArray(guests) ? guests.at(0) : guests;
+  }
+
   return request(`/guests/${id}`, {
     cache: "no-store",
+    forwardCookies: true,
   });
 }
 
 export async function getBooking(id) {
   const booking = await request(`/bookings/${id}`, {
     cache: "no-store",
+    forwardCookies: true,
   });
 
   return normalizeBooking(booking);
@@ -112,6 +132,7 @@ export async function getBooking(id) {
 export async function getBookings(guestId) {
   const bookings = await request(`/bookings?guestId=${guestId}&sort=startDate`, {
     cache: "no-store",
+    forwardCookies: true,
   });
 
   return Array.isArray(bookings) ? bookings.map(normalizeBooking) : [];
@@ -122,6 +143,7 @@ export async function getBookedDatesByCabinId(cabinId) {
     `/bookings?cabinId=${cabinId}&fields=startDate,endDate,status&sort=startDate`,
     {
       cache: "no-store",
+      forwardCookies: true,
     },
   );
 
@@ -152,13 +174,51 @@ export async function getSettings() {
 }
 
 export async function getCountries() {
-  try {
-    const res = await fetch("https://restcountries.com/v2/all?fields=name,flag");
-    const countries = await res.json();
+  if (!REST_COUNTRIES_API_KEY) {
+    throw new Error("Missing REST_COUNTRIES_API_KEY");
+  }
 
-    return Array.isArray(countries) ? countries : [];
-  } catch {
-    throw new Error("Could not fetch countries");
+  try {
+    const countries = [];
+    let offset = 0;
+    let hasMore = true;
+
+    while (hasMore) {
+      const res = await fetch(
+        `https://api.restcountries.com/countries/v5?limit=100&offset=${offset}&response_fields=names.common,codes.alpha_2`,
+        {
+          headers: {
+            Authorization: `Bearer ${REST_COUNTRIES_API_KEY}`,
+          },
+          next: { revalidate: 86400 },
+        },
+      );
+
+      if (!res.ok) {
+        throw new Error(`Could not fetch countries: ${res.status}`);
+      }
+
+      const payload = await res.json();
+      const objects = payload?.data?.objects;
+
+      if (!Array.isArray(objects)) break;
+
+      countries.push(...objects);
+      hasMore = Boolean(payload?.data?.meta?.more);
+      offset += 100;
+    }
+
+    return countries
+      .map((country) => ({
+        name: country.names?.common,
+        flag: country.codes?.alpha_2
+          ? `https://flags.restcountries.com/v5/w320/${country.codes.alpha_2.toLowerCase()}.png`
+          : "",
+      }))
+      .filter((country) => country.name && country.flag)
+      .sort((a, b) => a.name.localeCompare(b.name));
+  } catch (error) {
+    throw new Error(error.message || "Could not fetch countries");
   }
 }
 
@@ -166,6 +226,7 @@ export async function createGuest(newGuest) {
   return request("/guests", {
     method: "POST",
     body: JSON.stringify(newGuest),
+    forwardCookies: true,
   });
 }
 
@@ -173,6 +234,7 @@ export async function createBooking(newBooking) {
   const booking = await request("/bookings", {
     method: "POST",
     body: JSON.stringify(newBooking),
+    forwardCookies: true,
   });
 
   return normalizeBooking(booking);
@@ -182,6 +244,7 @@ export async function updateGuest(id, updatedFields) {
   return request(`/guests/${id}`, {
     method: "PATCH",
     body: JSON.stringify(updatedFields),
+    forwardCookies: true,
   });
 }
 
@@ -189,6 +252,7 @@ export async function updateBooking(id, updatedFields) {
   const booking = await request(`/bookings/${id}`, {
     method: "PATCH",
     body: JSON.stringify(updatedFields),
+    forwardCookies: true,
   });
 
   return normalizeBooking(booking);
@@ -197,5 +261,6 @@ export async function updateBooking(id, updatedFields) {
 export async function deleteBooking(id) {
   return request(`/bookings/${id}`, {
     method: "DELETE",
+    forwardCookies: true,
   });
 }

@@ -1,79 +1,118 @@
-import { isWithinInterval } from "date-fns";
+"use client";
+
+import { differenceInCalendarDays, isWithinInterval } from "date-fns";
+import { useCallback, useMemo } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
+import { useReservation } from "./ReservationContext";
+import styles from "./DateSelector.module.css";
 
-function isAlreadyBooked(range, datesArr) {
-  return (
-    range.from &&
-    range.to &&
-    datesArr.some((date) =>
-      isWithinInterval(date, { start: range.from, end: range.to })
-    )
+function DateSelector({ cabin, settings, bookedDates }) {
+  const { regularPrice, discount } = cabin;
+  const { range, setRange } = useReservation();
+
+  const minBookingLength = settings.minimumNights;
+  const maxBookingLength = settings.maximumNights;
+  const bookedDateKeys = useMemo(
+    () =>
+      new Set(
+        bookedDates.map((date) => new Date(date).toDateString()),
+      ),
+    [bookedDates],
   );
-}
+  const today = useMemo(() => {
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+    return currentDate;
+  }, []);
+  const disabledMatcher = useMemo(
+    () => (date) => date < today || bookedDateKeys.has(date.toDateString()),
+    [bookedDateKeys, today],
+  );
+  const lastBookingDate = useMemo(
+    () => new Date(today.getFullYear() + 5, 11, 31),
+    [today],
+  );
+  const numNights =
+    range?.from && range?.to
+      ? differenceInCalendarDays(range.to, range.from)
+      : 0;
+  const cabinPrice = numNights * (regularPrice - discount);
 
-function DateSelector() {
-  // CHANGE
-  const regularPrice = 23;
-  const discount = 23;
-  const numNights = 23;
-  const cabinPrice = 23;
-  const range = { from: null, to: null };
+  const handleSelect = useCallback((nextRange) => {
+    if (
+      nextRange?.from &&
+      nextRange?.to &&
+      [...bookedDateKeys].some((date) =>
+        isWithinInterval(new Date(date), {
+          start: nextRange.from,
+          end: nextRange.to,
+        }),
+      )
+    ) {
+      setRange(undefined);
+      return;
+    }
 
-  // SETTINGS
-  const minBookingLength = 1;
-  const maxBookingLength = 23;
+    setRange(nextRange);
+  }, [bookedDateKeys, setRange]);
+  const handleMonthChange = useCallback(() => {
+    if (range?.from && range?.to) setRange(undefined);
+  }, [range, setRange]);
 
   return (
-    <div className="flex flex-col justify-between">
+    <div className={styles.dateSelector}>
       <DayPicker
-        className="pt-12 place-self-center"
+        className={styles.calendar}
         mode="range"
-        min={minBookingLength + 1}
+        selected={range}
+        onSelect={handleSelect}
+        onMonthChange={handleMonthChange}
+        min={minBookingLength}
         max={maxBookingLength}
-        fromMonth={new Date()}
-        fromDate={new Date()}
-        toYear={new Date().getFullYear() + 5}
-        captionLayout="dropdown"
+        startMonth={today}
+        endMonth={lastBookingDate}
+        captionLayout="label"
         numberOfMonths={2}
+        disabled={disabledMatcher}
       />
 
-      <div className="flex items-center justify-between px-8 bg-accent-500 text-primary-800 h-[72px]">
-        <div className="flex items-baseline gap-6">
-          <p className="flex gap-2 items-baseline">
+      <div className={styles.priceBar}>
+        <div className={styles.priceDetails}>
+          <p className={styles.nightPrice}>
             {discount > 0 ? (
               <>
-                <span className="text-2xl">${regularPrice - discount}</span>
-                <span className="line-through font-semibold text-primary-700">
+                <span className={styles.currentPrice}>
+                  ${regularPrice - discount}
+                </span>
+                <span className={styles.oldPrice}>
                   ${regularPrice}
                 </span>
               </>
             ) : (
-              <span className="text-2xl">${regularPrice}</span>
+              <span className={styles.currentPrice}>${regularPrice}</span>
             )}
-            <span className="">/night</span>
+            <span>/night</span>
           </p>
-          {numNights ? (
+          {numNights > 0 ? (
             <>
-              <p className="bg-accent-600 px-3 py-2 text-2xl">
+              <p className={styles.multiplier}>
                 <span>&times;</span> <span>{numNights}</span>
               </p>
               <p>
-                <span className="text-lg font-bold uppercase">Total</span>{" "}
-                <span className="text-2xl font-semibold">${cabinPrice}</span>
+                <span className={styles.totalLabel}>Total</span>{" "}
+                <span className={styles.totalPrice}>${cabinPrice}</span>
               </p>
+              <button
+                className={styles.clearButton}
+                type="button"
+                onClick={() => setRange(undefined)}
+              >
+                Clear
+              </button>
             </>
           ) : null}
         </div>
-
-        {range.from || range.to ? (
-          <button
-            className="border border-primary-800 py-2 px-4 text-sm font-semibold"
-            onClick={() => resetRange()}
-          >
-            Clear
-          </button>
-        ) : null}
       </div>
     </div>
   );

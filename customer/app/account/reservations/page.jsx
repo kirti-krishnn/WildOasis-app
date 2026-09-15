@@ -1,28 +1,30 @@
-import ReservationCard from "@/_components/ReservationCard";
+import ReservationList from "./ReservationList";
+import { auth } from "@/_lib/auth";
+import { getBookings, getGuest } from "@/_lib/data-service";
+import Link from "next/link";
+import styles from "./page.module.css";
 
-export default function Page() {
-  // CHANGE
-  const bookings = [];
+export default async function Page() {
+  const session = await auth();
+  const guest = session?.user?.email ? await getGuest(session.user.email) : null;
+  const guestId = guest?.id || guest?._id;
+  const bookings = guestId ? await getBookings(guestId) : [];
 
   return (
-    <div>
-      <h2 className="font-semibold text-2xl text-accent-400 mb-7">
+    <div className={styles.page}>
+      <h2 className={styles.heading}>
         Your reservations
       </h2>
 
       {bookings.length === 0 ? (
-        <p className="text-lg text-primary-100">
+        <p className={styles.emptyMessage}>
           You have no reservations yet. Check out our{" "}
-          <a className="underline text-accent-400" href="/cabins">
+          <Link className={styles.link} href="/cabins">
             luxury cabins &rarr;
-          </a>
+          </Link>
         </p>
       ) : (
-        <ul className="space-y-6">
-          {bookings.map((booking) => (
-            <ReservationCard booking={booking} key={booking.id} />
-          ))}
-        </ul>
+        <ReservationList bookings={bookings} />
       )}
     </div>
   );

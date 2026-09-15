@@ -3,9 +3,9 @@ import mongoose from 'mongoose';
 interface IGuest {
     fullName: string;
     email: string;
-    nationality: string;
-    nationalID: string;
-    countryFlag: string;
+    nationality?: string;
+    nationalID?: string;
+    countryFlag?: string;
 }
 
 const guestSchema = new mongoose.Schema<IGuest>({
@@ -27,9 +27,9 @@ const guestSchema = new mongoose.Schema<IGuest>({
     },
     nationality: {
         type: String,
-        required: true,
         validate: {
             validator: function (value: string): boolean {
+                if (!value) return true;
                 // Simple nationality validation (only letters and spaces)
                 return /^[a-zA-Z\s]+$/.test(value);
             },
@@ -38,10 +38,11 @@ const guestSchema = new mongoose.Schema<IGuest>({
     },
     nationalID: {
         type: String,
-        required: true,
         unique: true,
+        sparse: true,
         validate: {
             validator: function (value: string): boolean {
+                if (!value) return true;
                 // Simple national ID validation (alphanumeric, 6-20 characters)
                 return /^[a-zA-Z0-9]{6,20}$/.test(value);
             },
@@ -50,7 +51,6 @@ const guestSchema = new mongoose.Schema<IGuest>({
     },
     countryFlag: {
         type: String,
-        required: true,
     },
 });
 
