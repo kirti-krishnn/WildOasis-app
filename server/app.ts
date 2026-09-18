@@ -17,6 +17,8 @@ import { captureExpressError } from './utils/sentry.ts';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+import Cabin from './models/cabinsModel.ts';
+
 const app = express();
 
 app.set('trust proxy', 1);
@@ -65,20 +67,8 @@ if (process.env.DISABLE_RATE_LIMIT !== 'true') {
   app.use('/api/v1', apiLimiter);
 }
 
-/* // Basic health check
-app.get('/api/v1/health', async (req, res) => {
-  const dbOk = mongoose.connection.readyState === 1;
-  res.status(200).json({
-    status: 'success',
-    data: {
-      ok: true,
-      db: dbOk,
-      env: process.env.NODE_ENV,
-    },
-  });
-}); */
 
-app.get('/api/v1/health', async (req, res) => {
+/* app.get('/api/v1/health', async (req, res) => {
   const dbOk = mongoose.connection.readyState === 1;
 
   res.status(200).json({
@@ -88,6 +78,24 @@ app.get('/api/v1/health', async (req, res) => {
       db: dbOk,
       env: process.env.NODE_ENV,
       dbName: mongoose.connection.name,
+    },
+  });
+}); */
+
+
+app.get('/api/v1/health', async (req, res) => {
+  const dbOk = mongoose.connection.readyState === 1;
+
+  const cabinCount = dbOk ? await Cabin.countDocuments() : 0;
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      ok: true,
+      db: dbOk,
+      env: process.env.NODE_ENV,
+      dbName: mongoose.connection.name,
+      cabinCount,
     },
   });
 });
