@@ -41,11 +41,15 @@ export default async function Page({ params }) {
 
   const { name, maxCapacity, image, description } = cabin;
 
+    const imageUrl = image.startsWith("http")
+    ? image
+    : `https://wild-oasis-api.vercel.app${image}`;
+
   return (
     <main className={`${styles.page} ${styles.detailPage}`}>
       <div className={`${styles.cabin} ${styles.detailCabin}`}>
         <div className={styles.imageWrap}>
-          <Image width={220} height={195.2} src={image} alt={`Cabin ${name}`} />
+          <Image width={220} height={195.2} src={imageUrl} alt={`Cabin ${name}`} />
         </div>
 
         <div className={styles.content}>
