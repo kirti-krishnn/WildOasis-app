@@ -16,7 +16,10 @@ export async function createReservation(formData) {
   const session = await auth();
   const email = session?.user?.email;
 
-  if (!email) redirect("/login");
+  if (!email) {
+  console.error("UPDATE PROFILE: server session is missing");
+  throw new Error("SERVER SESSION IS MISSING");
+}
 
   const guest = await getGuest(email);
   const guestId = guest?.id || guest?._id;
