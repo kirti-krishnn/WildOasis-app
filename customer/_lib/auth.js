@@ -27,9 +27,10 @@ export const authOptions = {
         }
 
         return true;
-      } catch {
-        return false;
-      }
+      } catch (error) {
+  console.error("Google sign-in callback failed:", error);
+  return false;
+}
     },
     authorized({ auth, request }) {
       void request;
