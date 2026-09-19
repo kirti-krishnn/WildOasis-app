@@ -9,6 +9,9 @@ export const metadata = {
 
 async function Page() {
   const session = await auth();
+
+  console.log("SERVER SESSION:", session);
+
   const name = session?.user?.name || "Guest";
 
   return (
