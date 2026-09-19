@@ -96,7 +96,7 @@ export async function getCabins() {
     
     "/cabins?sort=name&fields=name,maxCapacity,regularPrice,discount,image",
     {
-      next: { revalidate: 3600 },
+      next: { revalidate: 300 },
     },
   );
   
