@@ -6,12 +6,17 @@ import Image from "next/image";
 function CabinCard({ cabin }) {
   const { id, name, maxCapacity, regularPrice, discount, image } = cabin;
 
+
+  const imageUrl = image.startsWith("http")
+    ? image
+    : `https://wild-oasis-api.vercel.app${image}`;
+
   return (
     <article className={styles.card}>
       <Image
       width={220}
       height={195.2}
-        src={image}
+        src={imageUrl}
         alt={`Cabin ${name}`}
         className={styles.image}
       />
