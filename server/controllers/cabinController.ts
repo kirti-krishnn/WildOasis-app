@@ -3,7 +3,16 @@ import AppError from '../utils/appError.ts';
 import { catchAsync } from '../utils/catchAsync.ts';
 import { getAll, getOne, createOne, deleteOne } from './handlerFactory.ts';
 
-export const getAllCabins = getAll(Cabin);
+/* export const getAllCabins = getAll(Cabin); */
+export const getAllCabins = catchAsync(async (req, res) => {
+  const cabins = await Cabin.find({}).lean();
+
+  res.status(200).json({
+    status: 'success',
+    results: cabins.length,
+    data: cabins,
+  });
+});
 export const getCabin = getOne(Cabin);
 export const createCabin = createOne(Cabin);
 
