@@ -2,6 +2,7 @@ import express from 'express';
 import authController from '../controllers/authController.ts';
 import {
   getAllBookings,
+  getCabinAvailability,
   getBooking,
   createBooking,
   updateBooking,
@@ -19,6 +20,7 @@ const router = express.Router();
 router.get('/after-date/:date', getBookingByDate);
 router.get('/stays-after-date/:date', getStaysByDate);
 router.get('/stays-today-activity', getStaysTodayActivity);
+router.get('/availability/:cabinId', getCabinAvailability);
 router.get('/', authController.protectedRoute, getAllBookings);
 router.get('/:id', authController.protectedRoute, getBooking);
 

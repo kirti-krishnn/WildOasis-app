@@ -166,12 +166,8 @@ export async function getBookings(guestId, customerEmail) {
 
 export async function getBookedDatesByCabinId(cabinId, customerEmail) {
   const bookings = await request(
-    `/bookings?cabinId=${cabinId}&fields=startDate,endDate,status&sort=startDate`,
-    {
-      cache: "no-store",
-      forwardCookies: true,
-      customerEmail,
-    },
+    `/bookings/availability/${cabinId}`,
+    { cache: "no-store" },
   );
 
   if (!Array.isArray(bookings)) return [];

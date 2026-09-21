@@ -229,6 +229,18 @@ export const getAllBookings = catchAsync(async (req, res) => {
   });
 });
 
+export const getCabinAvailability = catchAsync(async (req, res) => {
+  const bookings = await Booking.find({ cabinId: req.params.cabinId })
+    .select('startDate endDate status')
+    .lean();
+
+  res.status(200).json({
+    status: 'success',
+    results: bookings.length,
+    data: bookings.map(normalizeBookingDates),
+  });
+});
+
 export const getBooking = catchAsync(async (req, res, next) => {
   const booking = await Booking.findById(req.params.id)
     .populate('cabinId', 'name maxCapacity regularPrice image')
