@@ -21,6 +21,7 @@ export default async function Page({ params }) {
   const reservationId = booking.id || booking._id;
   const maxCapacity = booking.cabinId?.maxCapacity || 23;
   const selectedGuests = String(booking.numGuests ?? "");
+  const hasBreakfast = Boolean(booking.hasBreakfast);
   const savedObservations = booking.observations || booking.description || "";
 
   return (
@@ -33,6 +34,7 @@ export default async function Page({ params }) {
         bookingId={reservationId}
         maxCapacity={maxCapacity}
         selectedGuests={selectedGuests}
+        hasBreakfast={hasBreakfast}
         savedObservations={savedObservations}
       />
     </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect, useState, useTransition } from "react";
+import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { updateReservation } from "@/_lib/actions";
 import styles from "./page.module.css";
@@ -17,24 +17,14 @@ function UpdateButton({ isSubmitting }) {
   );
 }
 
-function UpdateReservationForm({ bookingId, maxCapacity, selectedGuests, savedObservations }) {
-  const [, startTransition] = useTransition();
+function UpdateReservationForm({ bookingId, maxCapacity, selectedGuests, hasBreakfast, savedObservations }) {
   const [state, formAction, isPending] = useActionState(updateReservation, {
     error: "",
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const isUpdating = isPending || isSubmitting;
-
-  useEffect(() => {
-    if (state?.error) setIsSubmitting(false);
-  }, [state?.error]);
-
-  function handleSubmit() {
-    startTransition(() => setIsSubmitting(true));
-  }
+  const isUpdating = isPending;
 
   return (
-    <form className={styles.form} action={formAction} onSubmit={handleSubmit}>
+    <form className={styles.form} action={formAction}>
       <input type="hidden" name="bookingId" value={bookingId} />
       <div className={styles.field}>
         <label className={styles.label} htmlFor="numGuests">
@@ -60,6 +50,20 @@ function UpdateReservationForm({ bookingId, maxCapacity, selectedGuests, savedOb
       </div>
 
       <div className={styles.field}>
+        <label className={styles.label} htmlFor="hasBreakfast">
+          Include breakfast?
+        </label>
+        <input
+          type="checkbox"
+          name="hasBreakfast"
+          id="hasBreakfast"
+          value="true"
+          defaultChecked={hasBreakfast}
+          disabled={isUpdating}
+        />
+      </div>
+
+      <div className={styles.field}>
         <label className={styles.label} htmlFor="observations">
           Anything we should know about your stay?
         </label>
@@ -73,7 +77,7 @@ function UpdateReservationForm({ bookingId, maxCapacity, selectedGuests, savedOb
       </div>
 
       <div className={styles.actions}>
-        <UpdateButton isSubmitting={isSubmitting} />
+        <UpdateButton isSubmitting={isUpdating} />
       </div>
       {state?.error && (
         <p className={styles.error} role="alert">

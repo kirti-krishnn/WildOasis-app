@@ -154,6 +154,7 @@ export async function updateReservation(previousState, formData) {
 
     await updateBooking(bookingId, {
       numGuests: Number(formData.get("numGuests")),
+      hasBreakfast: formData.get("hasBreakfast") === "true",
       observations: formData.get("observations") || "",
     }, email);
 
