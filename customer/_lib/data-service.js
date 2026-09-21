@@ -76,12 +76,17 @@ async function request(path, options = {}) {
 function normalizeCabin(cabin) {
   if (!cabin) return cabin;
 
+  const image = cabin.image;
+  const imageUrl = image && /^https?:\/\//i.test(image)
+    ? image
+    : image
+      ? `${SERVER_ORIGIN}/${image.replace(/^\/+/, "")}`
+      : image;
+
   return {
     ...cabin,
     id: cabin.id || cabin._id,
-    image: cabin.image?.startsWith("/")
-      ? `${SERVER_ORIGIN}${cabin.image}`
-      : cabin.image,
+    image: imageUrl,
   };
 }
 

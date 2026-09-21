@@ -30,6 +30,7 @@ function ReservationCard({ booking, onDelete }) {
         height={200}
           priority
           quality={100}
+          unoptimized
           src={image}
           alt={`Cabin ${name}`}
           className={styles.image}
