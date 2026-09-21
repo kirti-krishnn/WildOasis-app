@@ -10,15 +10,10 @@ import useCreateCabin from "./useCreateCabin.js";
 import ConfirmDelete from "../../ui/ConfirmDelete.jsx";
 import useDeleteCabin from "./useDeleteCabin.js"
 import { useIsAdmin } from "../../auth/useIsAdmin.js";
+import { getAssetUrl } from "../../api.js";
 
 function getCabinImageSrc(image) {
-    if (!image) return "";
-    if (image.startsWith("http") || image.startsWith("data:")) return image;
-    if (image.startsWith("/uploads")) return image;
-    if (image.startsWith("uploads")) return `/${image}`;
-    if (image.startsWith("public/uploads")) return `/${image.replace("public/", "")}`;
-
-    return image;
+    return getAssetUrl(image);
 }
 
 export default function CabinRow({ cabin }) {

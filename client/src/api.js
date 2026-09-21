@@ -1,4 +1,5 @@
-const API_BASE = "/api/v1";
+const API_BASE = (import.meta.env.VITE_API_URL || "http://localhost:5000/api/v1").replace(/\/$/, "");
+const API_ORIGIN = new URL(API_BASE).origin;
 
 export class ApiError extends Error {
   constructor(message, status) {
@@ -7,6 +8,16 @@ export class ApiError extends Error {
   }
 }
 
+export const getAssetUrl = (assetPath) => {
+  if (!assetPath) return "";
+  if (/^(https?:|data:|blob:)/i.test(assetPath)) return assetPath;
+
+  const normalizedPath = assetPath
+    .replace(/^public\//, "/")
+    .replace(/^\/+/, "/");
+
+  return `${API_ORIGIN}${normalizedPath}`;
+};
 export const request = async (path, options = {}) => {
   const headers = new Headers(options.headers || {});
 

@@ -5,6 +5,7 @@ import rowStyles from "../../ui/FormRow.module.css";
 import useCreateCabin from "./useCreateCabin.js";
 import useEditCabin from "./useEditCabin.js";
 import { useForm } from "react-hook-form";
+import { getAssetUrl } from "../../api.js";
 
 export default function CreateCabinForm({ onClose = () => {}, cabinToEdit = {} }) {
 
@@ -112,7 +113,7 @@ export default function CreateCabinForm({ onClose = () => {}, cabinToEdit = {} }
          <div className={rowStyles.inputWithError}>
         {isEditMode && cabinToEdit.image && (
           <div className={rowStyles.currentImage}>
-            <img src={cabinToEdit.image} alt={cabinToEdit.name} style={{maxWidth: "100px", marginBottom: "10px"}} />
+            <img src={getAssetUrl(cabinToEdit.image)} alt={cabinToEdit.name} style={{maxWidth: "100px", marginBottom: "10px"}} />
             <p style={{fontSize: "0.875rem", color: "#9ca3af"}}>Current image</p>
           </div>
         )}
