@@ -3,13 +3,14 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "./auth";
+
 import {
   createBooking,
   deleteBooking,
   getBooking,
   getGuest,
   updateBooking,
-  updateCustomerProfile,
+  updateGuest,
 } from "./data-service";
 
 export async function createReservation(formData) {
@@ -69,13 +70,11 @@ export async function updateProfile(previousState, formData) {
 
     const [nationality, countryFlag] = String(formData.get("nationality") || "").split("%");
 
-    await updateCustomerProfile({
-    email,
-    nationalID,
-    nationality,
-    countryFlag,
-});
-
+    await updateGuest(guestId, {
+      nationalID,
+      nationality,
+      countryFlag,
+    });
 
     revalidatePath("/account/profile", "page");
   } catch (error) {

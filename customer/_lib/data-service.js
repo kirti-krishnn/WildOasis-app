@@ -246,19 +246,7 @@ export async function updateGuest(id, updatedFields) {
     body: JSON.stringify(updatedFields),
     forwardCookies: true,
   });
-
 }
-
-export async function updateCustomerProfile(data) {
-  return request("/guests/profile", {
-    method: "PATCH",
-    body: JSON.stringify(data),
-    headers: {
-      "X-Customer-API-Secret": process.env.CUSTOMER_API_SECRET,
-    },
-  });
-}
-
 
 export async function updateBooking(id, updatedFields) {
   const booking = await request(`/bookings/${id}`, {
