@@ -21,17 +21,18 @@ function ReservationCard({ booking, onDelete }) {
     cabins: { name, image },
   } = booking;
   const isPastBooking = isPast(new Date(startDate));
+  const imageUrl = image?.startsWith('http')
+    ? image
+    : `https://wild-oasis-api.vercel.app${image}`;
 
   return (
     <div className={styles.card}>
       <div className={styles.imageWrap}>
         <Image
-        width={200}
-        height={200}
+          width={200}
+          height={200}
           priority
-          quality={100}
-          unoptimized
-          src={image}
+          src={imageUrl}
           alt={`Cabin ${name}`}
           className={styles.image}
         />
