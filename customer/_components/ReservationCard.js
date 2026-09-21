@@ -73,7 +73,7 @@ function ReservationCard({ booking, onDelete }) {
           </p>
         </div>
       </div>
-
+      {!isPastBooking && (
       <div className={styles.actions}>
         <a
           href={`/profile/reservations/edit/${id}`}
@@ -81,11 +81,10 @@ function ReservationCard({ booking, onDelete }) {
         >
           <PencilSquareIcon className={styles.editIcon} />
           <span>Edit</span>
-        </a>
-        {!isPastBooking && (
+        </a>       
           <DeleteReservation bookingId={id} onDelete={onDelete} />
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
