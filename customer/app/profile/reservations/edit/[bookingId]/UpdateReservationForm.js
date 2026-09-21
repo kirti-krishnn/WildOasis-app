@@ -49,7 +49,7 @@ function UpdateReservationForm({ bookingId, maxCapacity, selectedGuests, hasBrea
         </select>
       </div>
 
-      <div className={styles.field}>
+      <div className={`${styles.field} ${styles.checkboxField}`}>
         <label className={styles.label} htmlFor="hasBreakfast">
           Include breakfast?
         </label>
