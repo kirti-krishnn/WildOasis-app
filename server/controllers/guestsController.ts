@@ -1,6 +1,6 @@
 import Guest from '../models/guestsModel.ts';
 import { catchAsync } from '../utils/catchAsync.ts';
-import { getOne, updateOne, deleteOne } from './handlerFactory.ts';
+import { createOne, getOne, updateOne, deleteOne } from './handlerFactory.ts';
 
 export const getAllGuests = catchAsync(async (req, res) => {
   const query: Record<string, unknown> = {};
@@ -19,5 +19,6 @@ export const getAllGuests = catchAsync(async (req, res) => {
 });
 
 export const getGuest = getOne(Guest);
+export const createGuest = createOne(Guest);
 export const updateGuest = updateOne(Guest);
 export const deleteGuest = deleteOne(Guest);
