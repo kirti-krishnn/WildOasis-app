@@ -77,11 +77,14 @@ function normalizeCabin(cabin) {
   if (!cabin) return cabin;
 
   const image = cabin.image;
+  const fallbackImage = cabin.name?.match(/(?:cabin\s*)?(\d+)$/i)?.[1]
+    ? `${SERVER_ORIGIN}/uploads/cabins/cabin-${cabin.name.match(/(?:cabin\s*)?(\d+)$/i)[1].padStart(3, "0")}.jpg`
+    : image;
   const imageUrl = image && /^https?:\/\//i.test(image)
     ? image
     : image
       ? `${SERVER_ORIGIN}/${image.replace(/^\/+/, "")}`
-      : image;
+      : fallbackImage;
 
   return {
     ...cabin,
