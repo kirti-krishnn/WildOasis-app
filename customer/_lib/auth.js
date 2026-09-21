@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import { getServerSession } from "next-auth";
+import { cookies, headers } from "next/headers";
 import GoogleProvider from "next-auth/providers/google";
 
 import { createGuest, getGuest } from "./data-service";
@@ -43,8 +44,24 @@ export const authOptions = {
   secret: process.env.AUTH_SECRET,
 };
 
-export function auth() {
-  return getServerSession(authOptions);
+export async function auth() {
+  const cookieStore = await cookies();
+  const headerStore = await headers();
+
+  const req = {
+    headers: Object.fromEntries(headerStore.entries()),
+    cookies: Object.fromEntries(
+      cookieStore.getAll().map((cookie) => [cookie.name, cookie.value]),
+    ),
+  };
+
+  const res = {
+    getHeader() {},
+    setCookie() {},
+    setHeader() {},
+  };
+
+  return getServerSession(req, res, authOptions);
 }
 
 export const handler = NextAuth(authOptions);
