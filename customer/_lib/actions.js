@@ -9,7 +9,7 @@ import {
   getBooking,
   getGuest,
   updateBooking,
-  updateGuest,
+  updateCustomerProfile,
 } from "./data-service";
 
 export async function createReservation(formData) {
@@ -167,3 +167,10 @@ export async function updateReservation(previousState, formData) {
 
   redirect("/account/reservations");
 }
+
+await updateCustomerProfile({
+  email,
+  nationalID,
+  nationality,
+  countryFlag,
+});
