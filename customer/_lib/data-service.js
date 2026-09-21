@@ -164,12 +164,13 @@ export async function getBookings(guestId, customerEmail) {
   return Array.isArray(bookings) ? bookings.map(normalizeBooking) : [];
 }
 
-export async function getBookedDatesByCabinId(cabinId) {
+export async function getBookedDatesByCabinId(cabinId, customerEmail) {
   const bookings = await request(
     `/bookings?cabinId=${cabinId}&fields=startDate,endDate,status&sort=startDate`,
     {
       cache: "no-store",
       forwardCookies: true,
+      customerEmail,
     },
   );
 
@@ -193,9 +194,10 @@ export async function getBookedDatesByCabinId(cabinId) {
     .flat();
 }
 
-export async function getSettings() {
+export async function getSettings(customerEmail) {
   return request("/settings", {
     next: { revalidate: 3600 },
+    customerEmail,
   });
 }
 

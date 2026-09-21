@@ -6,6 +6,7 @@ import Image from "next/image";
 import Reservation from "@/_components/Reservation";
 import Spinner from "@/_components/Spinner";
 import { Suspense } from "react";
+import { auth } from "@/_lib/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -29,6 +30,7 @@ export async function generateMetadata({ params }) {
 
 export default async function Page({ params }) {
   const { id } = await params;
+  const session = await auth();
   const cabin = await getCabin(id);
 
   if (!cabin) {
@@ -87,7 +89,7 @@ export default async function Page({ params }) {
         <h2 className={styles.reserveTitle}>Reserve {cabin.name} today. Pay on arrival.</h2>
       </div>
       <Suspense fallback={<Spinner />}>
-        <Reservation cabin={cabin} />
+        <Reservation cabin={cabin} customerEmail={session?.user?.email} />
       </Suspense>
     </main>
   );

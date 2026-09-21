@@ -6,10 +6,10 @@ import DateSelector from "./DateSelector";
 import ReservationForm from "./ReservationForm";
 import styles from "../app/cabins/page.module.css";
 
-async function Reservation({ cabin }) {
+async function Reservation({ cabin, customerEmail }) {
   const [settings, bookedDates] = await Promise.all([
-    getSettings(),
-    getBookedDatesByCabinId(cabin.id),
+    getSettings(customerEmail),
+    getBookedDatesByCabinId(cabin.id, customerEmail),
   ]);
 
   return (
