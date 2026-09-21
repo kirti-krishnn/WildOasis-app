@@ -9,7 +9,7 @@ import styles from "../app/cabins/page.module.css";
 async function Reservation({ cabin, customerEmail }) {
   const [settings, bookedDates] = await Promise.all([
     getSettings(customerEmail),
-    getBookedDatesByCabinId(cabin.id, customerEmail),
+    getBookedDatesByCabinId(cabin.id),
   ]);
 
   return (

@@ -155,7 +155,7 @@ export async function getBooking(id, customerEmail) {
 }
 
 export async function getBookings(guestId, customerEmail) {
-  const bookings = await request(`/bookings?guestId=${guestId}&sort=startDate`, {
+  const bookings = await request("/bookings/mine", {
     cache: "no-store",
     forwardCookies: true,
     customerEmail,
@@ -164,7 +164,7 @@ export async function getBookings(guestId, customerEmail) {
   return Array.isArray(bookings) ? bookings.map(normalizeBooking) : [];
 }
 
-export async function getBookedDatesByCabinId(cabinId, customerEmail) {
+export async function getBookedDatesByCabinId(cabinId) {
   const bookings = await request(
     `/bookings/availability/${cabinId}`,
     { cache: "no-store" },

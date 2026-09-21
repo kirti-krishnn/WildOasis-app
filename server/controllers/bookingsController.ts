@@ -229,6 +229,39 @@ export const getAllBookings = catchAsync(async (req, res) => {
   });
 });
 
+export const getMyBookings = catchAsync(async (req, res) => {
+  const customerEmail = req.user?.email;
+  const guest = customerEmail
+    ? await Guest.findOne({ email: customerEmail }).select('_id').lean()
+    : null;
+
+  if (!guest) {
+    return res.status(200).json({
+      status: 'success',
+      results: 0,
+      totalResults: 0,
+      data: [],
+    });
+  }
+
+  const bookings = await Booking.find({ guestId: guest._id })
+    .populate('cabinId', 'name regularPrice image')
+    .populate('guestId', 'fullName email')
+    .sort({ startDate: 1 })
+    .lean();
+  const settings = await Settings.findOne().lean();
+  const breakfastPrice = settings?.breakfastPrice ?? 15;
+
+  const data = bookings.map((booking) => addCalculatedPrice(booking, breakfastPrice));
+
+  res.status(200).json({
+    status: 'success',
+    results: data.length,
+    totalResults: data.length,
+    data,
+  });
+});
+
 export const getCabinAvailability = catchAsync(async (req, res) => {
   const bookings = await Booking.find({ cabinId: req.params.cabinId })
     .select('startDate endDate status')
