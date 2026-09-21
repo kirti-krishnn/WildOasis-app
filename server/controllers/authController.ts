@@ -165,8 +165,12 @@ export const customerLogin = catchAsync(async (req, res, next) => {
   const assertion = getBearerToken(req);
   const secret = process.env.CUSTOMER_AUTH_SECRET as Secret;
 
-  if (!assertion || !secret) {
-    return next(new AppError("Please log in to access this page.", 401));
+  if (!secret) {
+    return next(new AppError("Customer authentication is not configured on the API.", 500));
+  }
+
+  if (!assertion) {
+    return next(new AppError("Customer authentication token is missing.", 401));
   }
 
   let decoded: JwtPayload & { email?: string; type?: string };

@@ -5,6 +5,10 @@ const secret = new TextEncoder().encode(
 );
 
 export async function createCustomerToken(email) {
+  if (!process.env.CUSTOMER_AUTH_SECRET) {
+    throw new Error("Customer authentication is not configured on the customer app.");
+  }
+
   return new SignJWT({
     email,
     type: "customer",

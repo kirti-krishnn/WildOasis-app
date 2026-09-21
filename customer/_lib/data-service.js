@@ -41,7 +41,12 @@ async function request(path, options = {}) {
     });
 
     if (!tokenResponse.ok) {
-      throw new ApiError("Could not authenticate customer.", tokenResponse.status);
+      const isJson = tokenResponse.headers.get("content-type")?.includes("application/json");
+      const tokenError = isJson ? await tokenResponse.json() : null;
+      throw new ApiError(
+        tokenError?.message || "Could not authenticate customer.",
+        tokenResponse.status,
+      );
     }
 
     const tokenPayload = await tokenResponse.json();
