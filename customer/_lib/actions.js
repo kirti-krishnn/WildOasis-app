@@ -38,7 +38,7 @@ export async function createReservation(formData) {
     isPaid: false,
     status: "unconfirmed",
     created_at: new Date().toISOString(),
-  });
+  }, email);
 
   revalidatePath("/account/reservations");
   redirect("/account/reservations");
@@ -74,6 +74,7 @@ export async function updateProfile(previousState, formData) {
       nationalID,
       nationality,
       countryFlag,
+      email,
     });
 
     revalidatePath("/account/profile", "page");
@@ -102,7 +103,7 @@ export async function deleteReservation(formData) {
 
   const guest = await getGuest(email);
   const guestId = String(guest?.id || guest?._id || "");
-  const booking = await getBooking(bookingId);
+  const booking = await getBooking(bookingId, email);
   const bookingGuestId = String(
     booking?.guestId?.id || booking?.guestId?._id || booking?.guestId || "",
   );
@@ -115,7 +116,7 @@ export async function deleteReservation(formData) {
     throw new Error("Past reservations cannot be deleted.");
   }
 
-  await deleteBooking(bookingId);
+  await deleteBooking(bookingId, email);
   revalidatePath("/account/reservations");
 }
 
@@ -138,7 +139,7 @@ export async function updateReservation(previousState, formData) {
 
     const guest = await getGuest(email);
     const guestId = String(guest?.id || guest?._id || "");
-    const booking = await getBooking(bookingId);
+    const booking = await getBooking(bookingId, email);
     const bookingGuestId = String(
       booking?.guestId?.id || booking?.guestId?._id || booking?.guestId || "",
     );
@@ -154,7 +155,7 @@ export async function updateReservation(previousState, formData) {
     await updateBooking(bookingId, {
       numGuests: Number(formData.get("numGuests")),
       observations: formData.get("observations") || "",
-    });
+    }, email);
 
     revalidatePath("/account/reservations");
     revalidatePath(`/profile/reservations/edit/${bookingId}`);

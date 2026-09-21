@@ -2,6 +2,7 @@ import { eachDayOfInterval } from "date-fns";
 
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
+import { createCustomerToken } from "./customer-token";
 
 const SERVER_API_URL = process.env.SERVER_API_URL || "http://127.0.0.1:5000/api/v1";
 const REST_COUNTRIES_API_KEY = process.env.REST_COUNTRIES_API_KEY;
@@ -14,7 +15,7 @@ class ApiError extends Error {
 }
 
 async function request(path, options = {}) {
-  const { forwardCookies = false, ...fetchOptions } = options;
+  const { forwardCookies = false, customerEmail, ...fetchOptions } = options;
   const headers = new Headers(options.headers || {});
 
   if (options.body && !(options.body instanceof FormData)) {
@@ -27,6 +28,24 @@ async function request(path, options = {}) {
     if (cookieHeader) {
       headers.set("Cookie", cookieHeader);
     }
+  }
+
+  if (customerEmail) {
+    const assertion = await createCustomerToken(customerEmail);
+    const tokenResponse = await fetch(`${SERVER_API_URL}/users/customer-login`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${assertion}`,
+      },
+      cache: "no-store",
+    });
+
+    if (!tokenResponse.ok) {
+      throw new ApiError("Could not authenticate customer.", tokenResponse.status);
+    }
+
+    const tokenPayload = await tokenResponse.json();
+    headers.set("Authorization", `Bearer ${tokenPayload.data.token}`);
   }
 
   const response = await fetch(`${SERVER_API_URL}${path}`, {
@@ -120,19 +139,21 @@ export async function getGuest(id) {
   });
 }
 
-export async function getBooking(id) {
+export async function getBooking(id, customerEmail) {
   const booking = await request(`/bookings/${id}`, {
     cache: "no-store",
     forwardCookies: true,
+    customerEmail,
   });
 
   return normalizeBooking(booking);
 }
 
-export async function getBookings(guestId) {
+export async function getBookings(guestId, customerEmail) {
   const bookings = await request(`/bookings?guestId=${guestId}&sort=startDate`, {
     cache: "no-store",
     forwardCookies: true,
+    customerEmail,
   });
 
   return Array.isArray(bookings) ? bookings.map(normalizeBooking) : [];
@@ -230,11 +251,12 @@ export async function createGuest(newGuest) {
   });
 }
 
-export async function createBooking(newBooking) {
+export async function createBooking(newBooking, customerEmail) {
   const booking = await request("/bookings", {
     method: "POST",
     body: JSON.stringify(newBooking),
     forwardCookies: true,
+    customerEmail,
   });
 
   return normalizeBooking(booking);
@@ -245,22 +267,25 @@ export async function updateGuest(id, updatedFields) {
     method: "PATCH",
     body: JSON.stringify(updatedFields),
     forwardCookies: true,
+    customerEmail: updatedFields.email,
   });
 }
 
-export async function updateBooking(id, updatedFields) {
+export async function updateBooking(id, updatedFields, customerEmail) {
   const booking = await request(`/bookings/${id}`, {
     method: "PATCH",
     body: JSON.stringify(updatedFields),
     forwardCookies: true,
+    customerEmail,
   });
 
   return normalizeBooking(booking);
 }
 
-export async function deleteBooking(id) {
+export async function deleteBooking(id, customerEmail) {
   return request(`/bookings/${id}`, {
     method: "DELETE",
     forwardCookies: true,
+    customerEmail,
   });
 }

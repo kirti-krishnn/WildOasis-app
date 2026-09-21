@@ -1,4 +1,5 @@
 import User from "../models/usersModel.ts";
+import Guest from "../models/guestsModel.ts";
 import type { UserDocument } from "../models/usersModel.ts";
 import { catchAsync } from "../utils/catchAsync.ts";
 import AppError from "../utils/appError.ts";
@@ -11,7 +12,15 @@ import { logger } from "../utils/logger.ts";
 interface AuthTokenPayload extends JwtPayload {
   id: string;
   sessionVersion?: number;
+  type?: string;
 }
+
+const getBearerToken = (req: Request) => {
+  const authorization = req.headers.authorization;
+  return authorization?.startsWith("Bearer ")
+    ? authorization.slice("Bearer ".length)
+    : undefined;
+};
 
 const getCookieValue = (cookieHeader: string | undefined, name: string) => {
   if (!cookieHeader) return undefined;
@@ -152,6 +161,48 @@ export const protectedRoute = catchAsync(async (req, res, next) => {
     next();
 });
 
+export const customerLogin = catchAsync(async (req, res, next) => {
+  const assertion = getBearerToken(req);
+  const secret = process.env.CUSTOMER_AUTH_SECRET as Secret;
+
+  if (!assertion || !secret) {
+    return next(new AppError("Please log in to access this page.", 401));
+  }
+
+  let decoded: JwtPayload & { email?: string; type?: string };
+  try {
+    decoded = jwt.verify(assertion, secret) as JwtPayload & {
+      email?: string;
+      type?: string;
+    };
+  } catch {
+    return next(new AppError("Invalid customer session.", 401));
+  }
+
+  if (decoded.type !== "customer" || !decoded.email) {
+    return next(new AppError("Invalid customer session.", 401));
+  }
+
+  const guest = await Guest.findOne({ email: decoded.email });
+  if (!guest) return next(new AppError("Guest account not found.", 404));
+
+  let user = await User.findOne({ email: decoded.email }).select("+sessionVersion");
+  if (!user) {
+    const generatedPassword = crypto.randomBytes(32).toString("hex");
+    user = await User.create({
+      name: guest.fullName,
+      email: guest.email,
+      password: generatedPassword,
+      passwordConfirm: generatedPassword,
+      role: "user",
+    });
+  }
+
+  const token = signToken(user);
+
+  res.status(200).json({ status: "success", data: { token, user } });
+});
+
 export const restrictTo = (...roles: Array<"user" | "admin">) => {
   return (req: Request, res: Response, next: NextFunction) => {
     if (!req.user) {
@@ -267,6 +318,7 @@ export const updatePassword = catchAsync(async (req, res, next) => {
 export default{
   signup,
   login,
+  customerLogin,
   logout,
   protectedRoute,
   restrictTo,

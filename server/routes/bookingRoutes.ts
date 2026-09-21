@@ -19,14 +19,14 @@ const router = express.Router();
 router.get('/after-date/:date', getBookingByDate);
 router.get('/stays-after-date/:date', getStaysByDate);
 router.get('/stays-today-activity', getStaysTodayActivity);
-router.get('/', getAllBookings);
-router.get('/:id', getBooking);
+router.get('/', authController.protectedRoute, getAllBookings);
+router.get('/:id', authController.protectedRoute, getBooking);
 
 // Temporarily disabled while authentication is paused.
 // router.use(authController.restrictTo('admin'));
-router.post('/', createBooking);
-router.patch('/:id', updateBooking);
-router.delete('/:id', deleteBooking);
+router.post('/', authController.protectedRoute, createBooking);
+router.patch('/:id', authController.protectedRoute, updateBooking);
+router.delete('/:id', authController.protectedRoute, deleteBooking);
 
 export default router;
 

@@ -14,12 +14,12 @@ router.get('/', getAllGuests);
 router.get('/:id', getGuest);
 router.post('/', createGuest);
 
+router.patch('/:id', authController.protectedRoute, updateGuest);
 
 
 router.use(authController.protectedRoute);
 router.use(authController.restrictTo('admin'));
 
-router.patch('/:id', updateGuest);
 router.delete('/:id', deleteGuest);
 
 export default router;

@@ -8,7 +8,7 @@ export default async function Page() {
   const session = await auth();
   const guest = session?.user?.email ? await getGuest(session.user.email) : null;
   const guestId = guest?.id || guest?._id;
-  const bookings = guestId ? await getBookings(guestId) : [];
+  const bookings = guestId ? await getBookings(guestId, session?.user?.email) : [];
 
   return (
     <div className={styles.page}>

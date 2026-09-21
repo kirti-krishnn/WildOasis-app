@@ -9,7 +9,7 @@ export default async function Page({ params }) {
   const session = await auth();
   if (!session?.user?.email) redirect("/login");
 
-  const booking = await getBooking(bookingId);
+  const booking = await getBooking(bookingId, session.user.email);
   const guest = await getGuest(session.user.email);
   const guestId = String(guest?.id || guest?._id || "");
   const bookingGuestId = String(

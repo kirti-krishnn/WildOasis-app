@@ -5,6 +5,7 @@ import { catchAsync } from "../utils/catchAsync.ts";
 import AppError from "../utils/appError.ts";
 import { deleteOne } from "./handlerFactory.ts";
 import APIFeatures from "../utils/apiFeatures.ts";
+import Guest from "../models/guestsModel.ts";
 
 type BookingWithPrice = Record<string, any>;
 
@@ -176,6 +177,12 @@ const calculateBookingPrices = async ({
 export const getAllBookings = catchAsync(async (req, res) => {
   const queryParams = { ...req.query };
   const baseFilter: Record<string, unknown> = {};
+  const customerEmail = req.user?.email;
+
+  if (customerEmail) {
+    const guest = await Guest.findOne({ email: customerEmail }).select('_id').lean();
+    baseFilter.guestId = guest?._id ?? null;
+  }
 
   if (queryParams.status === 'unconfirmed') {
     baseFilter.$or = [
@@ -230,6 +237,12 @@ export const getBooking = catchAsync(async (req, res, next) => {
 
   if (!booking) return next(new AppError('Booking not found', 404));
 
+  const customerEmail = req.user?.email;
+  const bookingGuest = booking.guestId as unknown as { email?: string };
+  if (customerEmail && bookingGuest?.email !== customerEmail) {
+    return next(new AppError('You do not have permission to view this reservation.', 403));
+  }
+
   const settings = await Settings.findOne().lean();
   const breakfastPrice = settings?.breakfastPrice ?? 15;
   const bookingWithCalculatedPrice = addCalculatedPrice(booking, breakfastPrice);
@@ -268,6 +281,13 @@ export const getStaysByDate = catchAsync(async (req, res) => {
 
 export const createBooking = catchAsync(async (req, res) => {
   const bookingPayload = normalizeWritableBookingDates(req.body);
+  const customerEmail = req.user?.email;
+
+  if (customerEmail) {
+    const guest = await Guest.findOne({ email: customerEmail }).select('_id').lean();
+    if (!guest) throw new AppError('Guest account not found.', 404);
+    bookingPayload.guestId = guest._id;
+  }
 
   ensureBookingDatesAreConsistent({
     created_at: bookingPayload.created_at as Date | string,
@@ -317,6 +337,12 @@ export const updateBooking = catchAsync(async (req, res, next) => {
   const currentBooking = await Booking.findById(req.params.id);
   if (!currentBooking) return next(new AppError('Booking not found', 404));
 
+  const customerEmail = req.user?.email;
+  if (customerEmail) {
+    const guest = await Guest.findOne({ _id: currentBooking.guestId, email: customerEmail }).select('_id');
+    if (!guest) return next(new AppError('You do not have permission to update this reservation.', 403));
+  }
+
   const effectiveStartDate = normalizedBody.startDate ?? currentBooking.startDate;
   const effectiveEndDate = normalizedBody.endDate ?? currentBooking.endDate;
   const effectiveHasBreakfast = normalizedBody.hasBreakfast ?? currentBooking.hasBreakfast;
@@ -360,7 +386,19 @@ export const updateBooking = catchAsync(async (req, res, next) => {
   });
 });
 
-export const deleteBooking = deleteOne(Booking);
+export const deleteBooking = catchAsync(async (req, res, next) => {
+  const customerEmail = req.user?.email;
+
+  if (customerEmail) {
+    const booking = await Booking.findById(req.params.id).lean();
+    if (!booking) return next(new AppError('Booking not found', 404));
+
+    const guest = await Guest.findOne({ _id: booking.guestId, email: customerEmail }).select('_id');
+    if (!guest) return next(new AppError('You do not have permission to delete this reservation.', 403));
+  }
+
+  return deleteOne(Booking)(req, res, next);
+});
 
 export const getStaysTodayActivity = catchAsync(async (req, res) => {
   const startOfToday = new Date();

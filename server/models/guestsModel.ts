@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-interface IGuest {
+export interface IGuest {
     fullName: string;
     email: string;
     nationality?: string;
