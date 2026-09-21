@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { createCustomerToken } from "./customer-token";
 
 const SERVER_API_URL = process.env.SERVER_API_URL || "http://127.0.0.1:5000/api/v1";
+const SERVER_ORIGIN = new URL(SERVER_API_URL).origin;
 const REST_COUNTRIES_API_KEY = process.env.REST_COUNTRIES_API_KEY;
 
 class ApiError extends Error {
@@ -78,6 +79,9 @@ function normalizeCabin(cabin) {
   return {
     ...cabin,
     id: cabin.id || cabin._id,
+    image: cabin.image?.startsWith("/")
+      ? `${SERVER_ORIGIN}${cabin.image}`
+      : cabin.image,
   };
 }
 
