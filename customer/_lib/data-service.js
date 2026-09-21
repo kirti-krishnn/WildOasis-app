@@ -247,8 +247,9 @@ export async function updateGuest(id, updatedFields) {
     forwardCookies: true,
   });
 
-  
-  export async function updateCustomerProfile(data) {
+}
+
+export async function updateCustomerProfile(data) {
   return request("/guests/profile", {
     method: "PATCH",
     body: JSON.stringify(data),
@@ -257,6 +258,7 @@ export async function updateGuest(id, updatedFields) {
     },
   });
 }
+
 
 export async function updateBooking(id, updatedFields) {
   const booking = await request(`/bookings/${id}`, {

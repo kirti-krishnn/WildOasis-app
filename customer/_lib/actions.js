@@ -69,11 +69,13 @@ export async function updateProfile(previousState, formData) {
 
     const [nationality, countryFlag] = String(formData.get("nationality") || "").split("%");
 
-    await updateGuest(guestId, {
-      nationalID,
-      nationality,
-      countryFlag,
-    });
+    await updateCustomerProfile({
+    email,
+    nationalID,
+    nationality,
+    countryFlag,
+});
+
 
     revalidatePath("/account/profile", "page");
   } catch (error) {
@@ -168,9 +170,3 @@ export async function updateReservation(previousState, formData) {
   redirect("/account/reservations");
 }
 
-await updateCustomerProfile({
-  email,
-  nationalID,
-  nationality,
-  countryFlag,
-});
