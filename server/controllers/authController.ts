@@ -187,15 +187,29 @@ export const customerLogin = catchAsync(async (req, res, next) => {
     return next(new AppError("Invalid customer session.", 401));
   }
 
-  const guest = await Guest.findOne({ email: decoded.email });
-  if (!guest) return next(new AppError("Guest account not found.", 404));
+  const email = decoded.email.trim().toLowerCase();
+  let guest = await Guest.findOne({ email: { $regex: `^${email.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, $options: "i" } });
 
-  let user = await User.findOne({ email: decoded.email }).select("+sessionVersion");
+  if (!guest) {
+    try {
+      guest = await Guest.create({
+        email,
+        fullName: email.split("@")[0],
+      });
+    } catch (error) {
+      if ((error as { code?: number })?.code !== 11000) throw error;
+      guest = await Guest.findOne({ email: { $regex: `^${email.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, $options: "i" } });
+    }
+  }
+
+  if (!guest) return next(new AppError("Could not create your guest account.", 500));
+
+  let user = await User.findOne({ email }).select("+sessionVersion");
   if (!user) {
     const generatedPassword = crypto.randomBytes(32).toString("hex");
     user = await User.create({
       name: guest.fullName,
-      email: guest.email,
+      email,
       password: generatedPassword,
       passwordConfirm: generatedPassword,
       role: "user",

@@ -7,7 +7,11 @@ export const getAllGuests = catchAsync(async (req, res) => {
   const query: Record<string, unknown> = {};
 
   if (req.query.email) {
-    query.email = String(req.query.email);
+    const email = String(req.query.email).trim();
+    query.email = {
+      $regex: `^${email.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`,
+      $options: 'i',
+    };
   }
 
   const guests = await Guest.find(query).lean();
