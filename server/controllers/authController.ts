@@ -49,7 +49,7 @@ const createSendToken = (user: UserDocument, statusCode: number, res: Response) 
   const cookieOptions: CookieOptions = {
     expires: new Date(Date.now() + cookieExpiresIn * 24 * 60 * 60 * 1000),
     httpOnly: true,
-    sameSite: "lax",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
   };
 
   if (process.env.NODE_ENV === "production") cookieOptions.secure = true;
@@ -118,7 +118,7 @@ export const logout = (req: Request, res: Response) => {
   const cookieOptions: CookieOptions = {
     expires: new Date(Date.now() + 10 * 1000),
     httpOnly: true,
-    sameSite: "lax",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
   };
 
   if (process.env.NODE_ENV === "production") cookieOptions.secure = true;

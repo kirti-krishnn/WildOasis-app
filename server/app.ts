@@ -30,9 +30,9 @@ const uploadsPath = process.env.UPLOADS_PATH
   : path.join(serverRoot, 'public', 'uploads');
 
 const allowedOrigins = [
-  process.env.CLIENT_URL || 'http://localhost:5173',
-  process.env.CUSTOMER_URL || 'http://localhost:3000',
-];
+  ...(process.env.CLIENT_URL || 'http://localhost:5173').split(','),
+  ...(process.env.CUSTOMER_URL || 'http://localhost:3000').split(','),
+].map((origin) => origin.trim().replace(/\/$/, ''));
 
 const corsOptions = {
   origin(origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) {
