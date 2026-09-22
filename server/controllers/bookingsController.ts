@@ -329,7 +329,13 @@ export const createBooking = catchAsync(async (req, res) => {
   const customerEmail = req.user?.email;
 
   if (customerEmail) {
-    const guest = await Guest.findOne({ email: customerEmail }).select('_id').lean();
+    const email = customerEmail.trim().toLowerCase();
+    const guest = await Guest.findOne({
+      email: {
+        $regex: `^${email.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`,
+        $options: 'i',
+      },
+    }).select('_id').lean();
     if (!guest) throw new AppError('Guest account not found.', 404);
     bookingPayload.guestId = guest._id;
   }
