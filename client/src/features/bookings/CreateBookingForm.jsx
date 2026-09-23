@@ -29,7 +29,6 @@ export default function CreateBookingForm({ bookingToEdit = {}, onClose = () => 
     defaultValues: getBookingFormDefaults(bookingToEdit),
   });
   const startDate = useWatch({ control, name: "startDate" });
-  const endDate = useWatch({ control, name: "endDate" });
   const cabinId = useWatch({ control, name: "cabinId" });
   const selectedCabin = cabins.find((cabin) => (cabin._id ?? cabin.id) === cabinId);
   const { data: bookedRanges = [], isLoading: isLoadingAvailability } = useCabinAvailability(cabinId, bookingId);
@@ -47,6 +46,17 @@ export default function CreateBookingForm({ bookingToEdit = {}, onClose = () => 
   const isBookedDate = (date) => bookedDates.some((bookedDate) => (
     date.toDateString() === bookedDate.toDateString()
   ));
+  const isDateRangeBooked = (start, end) => {
+    if (!start || !end) return false;
+
+    const startTime = new Date(`${start}T00:00:00`).getTime();
+    const endTime = new Date(`${end}T00:00:00`).getTime();
+
+    return bookedRanges.some((booking) => (
+      startTime < new Date(booking.endDate).getTime()
+      && endTime > new Date(booking.startDate).getTime()
+    ));
+  };
   const toDatePickerValue = (value) => value ? new Date(`${value}T00:00:00`) : null;
 
   const onSubmit = handleSubmit((data) => {
@@ -138,8 +148,6 @@ export default function CreateBookingForm({ bookingToEdit = {}, onClose = () => 
                 selected={toDatePickerValue(field.value)}
                 onChange={(date) => field.onChange(date ? date.toISOString().slice(0, 10) : "")}
                 minDate={new Date()}
-                maxDate={toDatePickerValue(endDate)}
-                excludeDates={bookedDates}
                 filterDate={(date) => !isBookedDate(date)}
                 disabled={isWorking}
                 dateFormat="dd-MM-yyyy"
@@ -158,14 +166,17 @@ export default function CreateBookingForm({ bookingToEdit = {}, onClose = () => 
             control={control}
             rules={{
               required: "End date is required",
-              validate: (value) => value >= getValues("startDate") || "End date must be on or after start date",
+              validate: (value) => {
+                if (value < getValues("startDate")) return "End date must be on or after start date";
+                if (isDateRangeBooked(getValues("startDate"), value)) return "These dates are already booked for this cabin";
+                return true;
+              },
             }}
             render={({ field }) => (
               <DatePicker
                 selected={toDatePickerValue(field.value)}
                 onChange={(date) => field.onChange(date ? date.toISOString().slice(0, 10) : "")}
                 minDate={toDatePickerValue(startDate) || new Date()}
-                excludeDates={bookedDates}
                 filterDate={(date) => !isBookedDate(date)}
                 disabled={isWorking}
                 dateFormat="dd-MM-yyyy"
