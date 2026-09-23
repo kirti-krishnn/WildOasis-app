@@ -17,6 +17,10 @@ export const bookingsApi = {
 
   getBookingById: (id) => request(`/bookings/${id}`),
 
+  getCabinAvailability: (cabinId, excludeBookingId) => request(
+    `/bookings/availability/${cabinId}${excludeBookingId ? `?excludeBookingId=${encodeURIComponent(excludeBookingId)}` : ""}`,
+  ),
+
   getBookingsAfterDate: (date) => request(`/bookings/after-date/${encodeURIComponent(date)}`),
 
   getStaysAfterDate: (date) => request(`/bookings/stays-after-date/${encodeURIComponent(date)}`),

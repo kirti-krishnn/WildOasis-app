@@ -167,6 +167,9 @@ const calculateBookingPrices = async ({
   const breakfastPrice = settings?.breakfastPrice ?? 15;
   const nights = getNightCount(startDate, endDate);
   if (nights < 1) throw new AppError('End date must be on or after the start date.', 400);
+  if (numGuests > cabin.maxCapacity) {
+    throw new AppError(`This cabin allows up to ${cabin.maxCapacity} guests.`, 400);
+  }
 
   const extrasPrice = hasBreakfast ? breakfastPrice * (numGuests + 1) * nights : 0;
   const totalPrice = cabin.regularPrice * nights + extrasPrice;
@@ -263,7 +266,10 @@ export const getMyBookings = catchAsync(async (req, res) => {
 });
 
 export const getCabinAvailability = catchAsync(async (req, res) => {
-  const bookings = await Booking.find({ cabinId: req.params.cabinId })
+  const filter: Record<string, unknown> = { cabinId: req.params.cabinId };
+  if (req.query.excludeBookingId) filter._id = { $ne: req.query.excludeBookingId };
+
+  const bookings = await Booking.find(filter)
     .select('startDate endDate status')
     .lean();
 
@@ -344,6 +350,15 @@ export const createBooking = catchAsync(async (req, res) => {
     const guest = await Guest.findById(bookingPayload.guestId).select('_id').lean();
     if (!guest) throw new AppError('Selected guest not found.', 404);
     bookingPayload.guestId = guest._id;
+  }
+
+  const conflictingBooking = await Booking.findOne({
+    cabinId: bookingPayload.cabinId,
+    startDate: { $lt: bookingPayload.endDate },
+    endDate: { $gt: bookingPayload.startDate },
+  } as any).select('_id').lean();
+  if (conflictingBooking) {
+    throw new AppError('The selected cabin is already booked for these dates.', 409);
   }
 
   ensureBookingDatesAreConsistent({
