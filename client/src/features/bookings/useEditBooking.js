@@ -11,6 +11,7 @@ export default function useEditBooking() {
     onSuccess: (_data, variables) => {
       toast.success("Booking updated successfully");
       queryClient.invalidateQueries({ queryKey: ["bookings"] });
+      queryClient.refetchQueries({ queryKey: ["bookings"], type: "active" });
       queryClient.invalidateQueries({ queryKey: ["cabin-availability"] });
       queryClient.invalidateQueries({ queryKey: ["bookings", variables.id] });
       queryClient.invalidateQueries({ queryKey: ["dashboard-stats"] });

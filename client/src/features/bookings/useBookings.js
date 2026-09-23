@@ -21,6 +21,8 @@ export default function useBookings({
       status,
       sort: sortBy,
     }),
+    refetchOnMount: "always",
+    staleTime: 0,
     onError: (error) => {
       toast.error(error.message || "Failed to fetch bookings");
     },

@@ -11,6 +11,7 @@ export default function useDeleteBooking() {
     onSuccess: () => {
       toast.success("Booking deleted successfully");
       queryClient.invalidateQueries({ queryKey: ["bookings"] });
+      queryClient.refetchQueries({ queryKey: ["bookings"], type: "active" });
       queryClient.invalidateQueries({ queryKey: ["cabin-availability"] });
       queryClient.invalidateQueries({ queryKey: ["dashboard-stats"] });
       queryClient.invalidateQueries({ queryKey: ["today-activity"] });
