@@ -11,6 +11,7 @@ export default function useCreateBooking() {
     onSuccess: () => {
       toast.success("Booking created successfully");
       queryClient.invalidateQueries({ queryKey: ["bookings"] });
+      queryClient.invalidateQueries({ queryKey: ["cabin-availability"] });
       queryClient.invalidateQueries({ queryKey: ["dashboard-stats"] });
       queryClient.invalidateQueries({ queryKey: ["today-activity"] });
     },

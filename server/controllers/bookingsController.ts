@@ -182,8 +182,11 @@ export const getAllBookings = catchAsync(async (req, res) => {
   const baseFilter: Record<string, unknown> = {};
   const customerEmail = req.user?.email;
 
-  if (customerEmail) {
-    const guest = await Guest.findOne({ email: customerEmail }).select('_id').lean();
+  if (req.user?.role === 'user' && customerEmail) {
+    const email = customerEmail.trim().toLowerCase();
+    const guest = await Guest.findOne({
+      email: { $regex: `^${email.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, $options: 'i' },
+    }).select('_id').lean();
     baseFilter.guestId = guest?._id ?? null;
   }
 
@@ -269,7 +272,15 @@ export const getCabinAvailability = catchAsync(async (req, res) => {
   const filter: Record<string, unknown> = { cabinId: req.params.cabinId };
   if (req.query.excludeBookingId) filter._id = { $ne: req.query.excludeBookingId };
 
-  const bookings = await Booking.find(filter)
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const bookings = await Booking.find({
+    ...filter,
+    $or: [
+      { startDate: { $gte: today } },
+      { status: 'checked-in' },
+    ],
+  })
     .select('startDate endDate status')
     .lean();
 

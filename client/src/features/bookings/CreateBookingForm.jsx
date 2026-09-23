@@ -38,7 +38,7 @@ export default function CreateBookingForm({ bookingToEdit = {}, onClose = () => 
     const dates = [];
     const current = new Date(booking.startDate);
     const end = new Date(booking.endDate);
-    while (current < end) {
+    while (current <= end) {
       dates.push(new Date(current));
       current.setDate(current.getDate() + 1);
     }
