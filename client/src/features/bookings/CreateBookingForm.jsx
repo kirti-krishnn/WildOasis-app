@@ -33,10 +33,20 @@ export default function CreateBookingForm({ bookingToEdit = {}, onClose = () => 
   const selectedCabin = cabins.find((cabin) => (cabin._id ?? cabin.id) === cabinId);
   const { data: bookedRanges = [], isLoading: isLoadingAvailability } = useCabinAvailability(cabinId, bookingId);
   const isWorking = isCreating || isEditing || isLoadingOptions || isLoadingAvailability;
+  const parseDateOnly = (value) => {
+    const [year, month, day] = String(value).slice(0, 10).split("-").map(Number);
+    return new Date(year, month - 1, day);
+  };
+  const formatDateOnly = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
   const bookedDates = bookedRanges.flatMap((booking) => {
     const dates = [];
-    const current = new Date(booking.startDate);
-    const end = new Date(booking.endDate);
+    const current = parseDateOnly(booking.startDate);
+    const end = parseDateOnly(booking.endDate);
     while (current <= end) {
       dates.push(new Date(current));
       current.setDate(current.getDate() + 1);
@@ -44,20 +54,20 @@ export default function CreateBookingForm({ bookingToEdit = {}, onClose = () => 
     return dates;
   });
   const isBookedDate = (date) => bookedDates.some((bookedDate) => (
-    date.toDateString() === bookedDate.toDateString()
+    formatDateOnly(date) === formatDateOnly(bookedDate)
   ));
   const isDateRangeBooked = (start, end) => {
     if (!start || !end) return false;
 
-    const startTime = new Date(`${start}T00:00:00`).getTime();
-    const endTime = new Date(`${end}T00:00:00`).getTime();
+    const startTime = parseDateOnly(start).getTime();
+    const endTime = parseDateOnly(end).getTime();
 
     return bookedRanges.some((booking) => (
-      startTime < new Date(booking.endDate).getTime()
-      && endTime > new Date(booking.startDate).getTime()
+      startTime < parseDateOnly(booking.endDate).getTime()
+      && endTime > parseDateOnly(booking.startDate).getTime()
     ));
   };
-  const toDatePickerValue = (value) => value ? new Date(`${value}T00:00:00`) : null;
+  const toDatePickerValue = (value) => value ? parseDateOnly(value) : null;
 
   const onSubmit = handleSubmit((data) => {
     const editablePayload = buildEditableBookingPayload(data);
@@ -146,8 +156,9 @@ export default function CreateBookingForm({ bookingToEdit = {}, onClose = () => 
             render={({ field }) => (
               <DatePicker
                 selected={toDatePickerValue(field.value)}
-                onChange={(date) => field.onChange(date ? date.toISOString().slice(0, 10) : "")}
+                onChange={(date) => field.onChange(date ? formatDateOnly(date) : "")}
                 minDate={new Date()}
+                excludeDates={bookedDates}
                 filterDate={(date) => !isBookedDate(date)}
                 disabled={isWorking}
                 dateFormat="dd-MM-yyyy"
@@ -175,8 +186,9 @@ export default function CreateBookingForm({ bookingToEdit = {}, onClose = () => 
             render={({ field }) => (
               <DatePicker
                 selected={toDatePickerValue(field.value)}
-                onChange={(date) => field.onChange(date ? date.toISOString().slice(0, 10) : "")}
+                onChange={(date) => field.onChange(date ? formatDateOnly(date) : "")}
                 minDate={toDatePickerValue(startDate) || new Date()}
+                excludeDates={bookedDates}
                 filterDate={(date) => !isBookedDate(date)}
                 disabled={isWorking}
                 dateFormat="dd-MM-yyyy"
