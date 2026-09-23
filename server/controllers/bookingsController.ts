@@ -328,7 +328,7 @@ export const createBooking = catchAsync(async (req, res) => {
   const bookingPayload = normalizeWritableBookingDates(req.body);
   const customerEmail = req.user?.email;
 
-  if (customerEmail) {
+  if (req.user?.role === 'user' && customerEmail) {
     const email = customerEmail.trim().toLowerCase();
     const guest = await Guest.findOne({
       email: {
@@ -337,6 +337,12 @@ export const createBooking = catchAsync(async (req, res) => {
       },
     }).select('_id').lean();
     if (!guest) throw new AppError('Guest account not found.', 404);
+    bookingPayload.guestId = guest._id;
+  }
+
+  if (req.user?.role === 'admin') {
+    const guest = await Guest.findById(bookingPayload.guestId).select('_id').lean();
+    if (!guest) throw new AppError('Selected guest not found.', 404);
     bookingPayload.guestId = guest._id;
   }
 
