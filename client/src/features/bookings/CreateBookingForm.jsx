@@ -160,6 +160,7 @@ export default function CreateBookingForm({ bookingToEdit = {}, onClose = () => 
                 minDate={new Date()}
                 excludeDates={bookedDates}
                 filterDate={(date) => !isBookedDate(date)}
+                dayClassName={(date) => isBookedDate(date) ? styles.bookedDate : undefined}
                 disabled={isWorking}
                 dateFormat="dd-MM-yyyy"
                 placeholderText="Select start date"
@@ -190,6 +191,7 @@ export default function CreateBookingForm({ bookingToEdit = {}, onClose = () => 
                 minDate={toDatePickerValue(startDate) || new Date()}
                 excludeDates={bookedDates}
                 filterDate={(date) => !isBookedDate(date)}
+                dayClassName={(date) => isBookedDate(date) ? styles.bookedDate : undefined}
                 disabled={isWorking}
                 dateFormat="dd-MM-yyyy"
                 placeholderText="Select end date"

@@ -86,3 +86,11 @@
   height: 1.8rem;
   accent-color: #4f46e5;
 }
+
+.bookedDate,
+.bookedDate:hover {
+  color: #9ca3af;
+  background-color: #e5e7eb;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
