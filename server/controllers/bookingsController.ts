@@ -180,15 +180,6 @@ const calculateBookingPrices = async ({
 export const getAllBookings = catchAsync(async (req, res) => {
   const queryParams = { ...req.query };
   const baseFilter: Record<string, unknown> = {};
-  const customerEmail = req.user?.email;
-
-  if (req.user?.role === 'user' && customerEmail) {
-    const email = customerEmail.trim().toLowerCase();
-    const guest = await Guest.findOne({
-      email: { $regex: `^${email.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, $options: 'i' },
-    }).select('_id').lean();
-    baseFilter.guestId = guest?._id ?? null;
-  }
 
   if (queryParams.status === 'unconfirmed') {
     baseFilter.$or = [

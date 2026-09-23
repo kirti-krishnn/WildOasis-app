@@ -23,7 +23,7 @@ router.get('/stays-after-date/:date', getStaysByDate);
 router.get('/stays-today-activity', getStaysTodayActivity);
 router.get('/availability/:cabinId', getCabinAvailability);
 router.get('/mine', authController.protectedRoute, getMyBookings);
-router.get('/', authController.protectedRoute, getAllBookings);
+router.get('/', authController.protectedRoute, authController.restrictTo('admin'), getAllBookings);
 router.get('/:id', authController.protectedRoute, getBooking);
 
 // Temporarily disabled while authentication is paused.
