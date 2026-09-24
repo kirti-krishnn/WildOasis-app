@@ -23,8 +23,12 @@ export function AuthProvider({ children }) {
 
   const login = useCallback(async (email, password) => {
     const data = await authApi.login(email, password)
-    setUser(data.data?.user)
-    return data.data?.user
+    const loggedInUser = data.data?.user
+    setUser(loggedInUser)
+    const session = await authApi.me()
+    const currentUser = session.user || session.data?.user || session.data || loggedInUser
+    setUser(currentUser)
+    return currentUser
   }, [])
 
   const signup = useCallback(async (payload) => {

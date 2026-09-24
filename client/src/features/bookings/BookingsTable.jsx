@@ -39,7 +39,7 @@ export default function BookingsTable() {
       />
 
       {isLoading ? <Spinner label="Loading bookings" /> : null}
-      {error ? <p>{error.message}</p> : null}
+      {error ? <p role="alert">Could not load bookings: {error.message}</p> : null}
 
       {!isLoading && !error ? (
         <>
