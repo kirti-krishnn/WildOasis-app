@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { authApi } from './authApi.js'
 import { AuthContext } from './auth-context'
+import { setAuthToken } from '../api.js'
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
@@ -24,11 +25,9 @@ export function AuthProvider({ children }) {
   const login = useCallback(async (email, password) => {
     const data = await authApi.login(email, password)
     const loggedInUser = data.data?.user
+    setAuthToken(data.data?.token)
     setUser(loggedInUser)
-    const session = await authApi.me()
-    const currentUser = session.user || session.data?.user || session.data || loggedInUser
-    setUser(currentUser)
-    return currentUser
+    return loggedInUser
   }, [])
 
   const signup = useCallback(async (payload) => {
@@ -41,6 +40,7 @@ export function AuthProvider({ children }) {
     try {
       await authApi.logout()
     } finally {
+      setAuthToken(null)
       setUser(null)
     }
   }, [])

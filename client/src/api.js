@@ -8,6 +8,23 @@ export class ApiError extends Error {
   }
 }
 
+const getStoredAuthToken = () => {
+  try {
+    return sessionStorage.getItem("wild-oasis-auth-token");
+  } catch {
+    return null;
+  }
+};
+
+export const setAuthToken = (token) => {
+  try {
+    if (token) sessionStorage.setItem("wild-oasis-auth-token", token);
+    else sessionStorage.removeItem("wild-oasis-auth-token");
+  } catch {
+    // Storage can be unavailable in privacy-restricted browsers.
+  }
+};
+
 export const getAssetUrl = (assetPath) => {
   if (!assetPath) return "";
   if (/^(https?:|data:|blob:)/i.test(assetPath)) return assetPath;
@@ -20,6 +37,11 @@ export const getAssetUrl = (assetPath) => {
 };
 export const request = async (path, options = {}) => {
   const headers = new Headers(options.headers || {});
+  const authToken = getStoredAuthToken();
+
+  if (authToken && !headers.has("Authorization")) {
+    headers.set("Authorization", `Bearer ${authToken}`);
+  }
 
   if (options.body && !(options.body instanceof FormData)) {
     headers.set("Content-Type", "application/json");
