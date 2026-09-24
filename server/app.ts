@@ -56,6 +56,14 @@ app.use(
   express.static(uploadsPath),
 );
 
+app.get('/', (_req, res) => {
+  res.status(200).json({
+    status: 'success',
+    message: 'Wild Oasis API is running.',
+    health: '/api/v1/health',
+  });
+});
+
 if (process.env.DISABLE_RATE_LIMIT !== 'true') {
   const apiLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,

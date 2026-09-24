@@ -6,13 +6,16 @@ import mongoose from 'mongoose';
 dns.setServers(['8.8.8.8', '1.1.1.1']);
 
 export async function connectDB() {
-  if (!process.env.DATABASE || !process.env.DATABASE_PASSWORD) {
-    throw new Error('Missing DATABASE or DATABASE_PASSWORD environment variables.');
+  const databaseTemplate = process.env.DATABASE || process.env.DATABASE_URL || process.env.MONGODB_URI;
+  const databasePassword = process.env.DATABASE_PASSWORD || process.env.MONGODB_PASSWORD;
+
+  if (!databaseTemplate) {
+    throw new Error('Missing DATABASE, DATABASE_URL, or MONGODB_URI environment variable.');
   }
 
-  const DB = process.env.DATABASE.replace(
+  const DB = databaseTemplate.replace(
     "<db_password>",
-    process.env.DATABASE_PASSWORD,
+    databasePassword || '',
   );
 
   const connection = await mongoose.connect(DB);
