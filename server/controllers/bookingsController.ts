@@ -4,7 +4,6 @@ import Settings from "../models/settings.ts";
 import { catchAsync } from "../utils/catchAsync.ts";
 import AppError from "../utils/appError.ts";
 import { deleteOne } from "./handlerFactory.ts";
-import APIFeatures from "../utils/apiFeatures.ts";
 import Guest from "../models/guestsModel.ts";
 
 type BookingWithPrice = Record<string, any>;
@@ -178,40 +177,32 @@ const calculateBookingPrices = async ({
 };
 
 export const getAllBookings = catchAsync(async (req, res) => {
-  const queryParams = { ...req.query };
   const baseFilter: Record<string, unknown> = {};
+  const requestedStatus = String(req.query.status || '');
+  const statusFilter = requestedStatus && requestedStatus !== 'all' ? requestedStatus : '';
 
-  if (queryParams.status === 'unconfirmed') {
+  if (statusFilter === 'unconfirmed') {
     baseFilter.$or = [
       { status: 'unconfirmed' },
       { status: { $exists: false } },
       { status: null },
       { status: '' },
     ];
+  } else if (statusFilter) {
+    baseFilter.status = statusFilter;
   }
 
-  if (queryParams.status === 'unconfirmed') {
-    delete queryParams.status;
-  }
-
-  const countFeatures = new APIFeatures(
-    Booking.find(baseFilter),
-    queryParams,
-  ).filter();
-  const totalResults = await countFeatures.query.countDocuments();
-
-  const features = new APIFeatures(
-    Booking.find(baseFilter)
-      .populate('cabinId', 'name regularPrice image')
-      .populate('guestId', 'fullName email'),
-    queryParams,
-  )
-    .filter()
-    .sort()
-    .limitFields()
-    .paginate();
-
-  const bookings = await features.query.lean();
+  const page = Math.max(1, Number(req.query.page) || 1);
+  const limit = Math.min(100, Math.max(1, Number(req.query.limit) || 100));
+  const sort = String(req.query.sort || '-startDate').replace(/,/g, ' ');
+  const totalResults = await Booking.countDocuments(baseFilter);
+  const bookings = await Booking.find(baseFilter)
+    .populate('cabinId', 'name regularPrice image maxCapacity')
+    .populate('guestId', 'fullName email')
+    .sort(sort)
+    .skip((page - 1) * limit)
+    .limit(limit)
+    .lean();
   const settings = await Settings.findOne().lean();
   const breakfastPrice = settings?.breakfastPrice ?? 15;
   const bookingsWithCalculatedPrice = bookings.map((booking) =>
