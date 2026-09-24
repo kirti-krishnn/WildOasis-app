@@ -5,16 +5,16 @@ import mongoose from 'mongoose';
 // This is a workaround for environments where `querySrv` fails with ECONNREFUSED.
 dns.setServers(['8.8.8.8', '1.1.1.1']);
 
-if (!process.env.DATABASE || !process.env.DATABASE_PASSWORD) {
-  throw new Error('Missing DATABASE or DATABASE_PASSWORD in server/.env');
-}
-
-const DB = process.env.DATABASE.replace(
-  "<db_password>",
-  process.env.DATABASE_PASSWORD,
-);
-
 export async function connectDB() {
+  if (!process.env.DATABASE || !process.env.DATABASE_PASSWORD) {
+    throw new Error('Missing DATABASE or DATABASE_PASSWORD environment variables.');
+  }
+
+  const DB = process.env.DATABASE.replace(
+    "<db_password>",
+    process.env.DATABASE_PASSWORD,
+  );
+
   const connection = await mongoose.connect(DB);
 
   console.log('DB connection successful');

@@ -17,7 +17,7 @@ const getLoginMessage = (err) => {
     return 'The application service is not available at this time. Kindly try again.'
   }
 
-  return 'We could not log you in right now. Please try again later.'
+  return err.message || 'We could not log you in right now. Please try again later.'
 }
 
 export function LoginForm() {

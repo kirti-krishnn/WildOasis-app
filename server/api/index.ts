@@ -19,7 +19,7 @@ async function handler(req: any, res: any) {
 
     return res.status(500).json({
       status: 'error',
-      message: 'Database connection failed',
+      message: error instanceof Error ? error.message : 'Database connection failed',
     });
   }
 }
